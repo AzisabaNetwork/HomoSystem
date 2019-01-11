@@ -1,0 +1,14 @@
+name: HOMOs
+main: jp.azisaba.main.homos.HOMOs
+version: 1.0.0
+author: siloneco
+description: "Hyper Original Money Operator System."
+softdepend: ["Vault"]
+commands:
+  homo:
+    usage: "/{LABEL}"
+    permission: homos.command.homo
+    aliases: ["homos"]
+permissions:
+  homos.command.homo:
+    default: op
