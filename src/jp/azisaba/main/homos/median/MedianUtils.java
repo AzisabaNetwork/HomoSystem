@@ -35,6 +35,10 @@ public class MedianUtils {
 
 			OfflinePlayer p = Bukkit.getOfflinePlayer(data.getUuid());
 
+			if (p == null) {
+				continue;
+			}
+
 			if (!econ.hasAccount(p)) {
 				continue;
 			}
