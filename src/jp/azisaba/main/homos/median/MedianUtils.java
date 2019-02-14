@@ -59,8 +59,6 @@ public class MedianUtils {
 			} else {
 				median = moneyList.get((int) (moneyList.size() / 2 + 0.5));
 			}
-
-			median = median / 1000;
 		} else {
 			median = 100000;
 			boost = true;
@@ -70,6 +68,8 @@ public class MedianUtils {
 			median = 100000;
 			boost = true;
 		}
+
+		median = median / 1000;
 
 		if (Homos.getMedianManager().getCurrentMedian() == median) {
 			return;
