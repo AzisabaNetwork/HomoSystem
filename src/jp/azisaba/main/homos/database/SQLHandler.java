@@ -361,7 +361,13 @@ public class SQLHandler {
 				boolean boost = set.getInt("boost") > 0;
 
 				median = new Median(exactServerName, medianNum, locked, boost);
+			} else {
+				stm.executeUpdate("INSERT INTO " + getMedianTableName() + " (server, median) VALUES ('" + serverName
+						+ "', 1000) ON DUPLICATE KEY UPDATE median=VALUES(median);");
+
+				median = new Median(serverName, 1000, false, true);
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
