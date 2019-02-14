@@ -1,0 +1,39 @@
+package jp.azisaba.main.homos.events;
+
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+
+public class TicketValueUpdateEvent extends Event implements Cancellable {
+
+	private static final HandlerList handlers = new HandlerList();
+	private int median;
+
+	public TicketValueUpdateEvent(int median) {
+		this.median = median;
+	}
+
+	public int getValue() {
+		return median;
+	}
+
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
+	private boolean cancel = false;
+
+	@Override
+	public boolean isCancelled() {
+		return cancel;
+	}
+
+	@Override
+	public void setCancelled(boolean cancel) {
+		this.cancel = cancel;
+	}
+}
