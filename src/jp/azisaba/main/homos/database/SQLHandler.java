@@ -72,7 +72,7 @@ public class SQLHandler {
 				"  UNIQUE KEY `server_UNIQUE` (`server`)" +
 				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
-		String createMoneyData = "CREATE TABLE `moneydata` (" +
+		String createMoneyData = "CREATE TABLE IF NOT EXISTS `moneydata` (" +
 				"  `uuid` varchar(36) NOT NULL," +
 				"  PRIMARY KEY (`uuid`)" +
 				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
