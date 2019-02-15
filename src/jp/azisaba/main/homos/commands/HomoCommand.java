@@ -32,10 +32,10 @@ public class HomoCommand implements CommandExecutor {
 			return;
 		}
 
-		if (args[0].equalsIgnoreCase("median")) {
+		if (args[0].equalsIgnoreCase("ticketvalue")) {
 
 			if (args.length <= 1) {
-				getMedianHelpMSG(label).send(p);
+				getTicketValueHelpMSG(label).send(p);
 				return;
 			}
 
@@ -55,7 +55,7 @@ public class HomoCommand implements CommandExecutor {
 					try {
 						value = Integer.parseInt(args[2]);
 					} catch (Exception e) {
-						p.sendMessage(ChatColor.RED + "正しい数字を入力してください。");
+						p.sendMessage(ChatColor.RED + "整数を入力してください。");
 						return;
 					}
 				}
@@ -86,7 +86,7 @@ public class HomoCommand implements CommandExecutor {
 				return;
 			}
 
-			getMedianHelpMSG(label).send(p);
+			getTicketValueHelpMSG(label).send(p);
 
 			return;
 		}
@@ -202,19 +202,19 @@ public class HomoCommand implements CommandExecutor {
 		return msg;
 	}
 
-	private JSONMessage getMedianHelpMSG(String label) {
+	private JSONMessage getTicketValueHelpMSG(String label) {
 		JSONMessage msg = JSONMessage
 				.create(ChatColor.LIGHT_PURPLE + StringUtils.repeat("-", 15) + ChatColor.GREEN + "[HOMOs]"
 						+ ChatColor.LIGHT_PURPLE
 						+ StringUtils.repeat("-", 15));
 		msg.newline();
 
-		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " median view" + ChatColor.GRAY
-				+ " - 現在の中央値の表示").runCommand("/" + label + " median view").newline();
-		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " median lock [value]" + ChatColor.GRAY
-				+ " - 指定した値で固定 (未指定で現在の値)").suggestCommand("/" + label + " median lock ").newline();
-		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " median unlock" + ChatColor.GRAY
-				+ " - 値の固定を解除)").runCommand("/" + label + " median unlock").newline();
+		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue view" + ChatColor.GRAY
+				+ " - 現在の中央値の表示").runCommand("/" + label + " ticketvalue view").newline();
+		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue lock [value]" + ChatColor.GRAY
+				+ " - 指定した値で固定 (未指定で現在の値)").suggestCommand("/" + label + " ticketvalue lock ").newline();
+		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue unlock" + ChatColor.GRAY
+				+ " - 値の固定を解除").runCommand("/" + label + " ticketvalue unlock").newline();
 		msg.then(ChatColor.LIGHT_PURPLE + StringUtils.repeat("-", 37));
 		return msg;
 	}

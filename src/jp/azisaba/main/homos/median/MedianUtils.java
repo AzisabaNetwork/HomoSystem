@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.SQLDataManager;
@@ -33,17 +30,15 @@ public class MedianUtils {
 
 		for (PlayerData data : playerDataList) {
 
-			OfflinePlayer p = Bukkit.getOfflinePlayer(data.getUuid());
+			@SuppressWarnings("deprecation")
+			boolean hasAccount = econ.hasAccount(data.getName());
 
-			if (p == null) {
+			if (!hasAccount) {
 				continue;
 			}
 
-			if (!econ.hasAccount(p)) {
-				continue;
-			}
-
-			double value = econ.getBalance(p);
+			@SuppressWarnings("deprecation")
+			double value = econ.getBalance(data.getName());
 
 			if (!isTargetValue(value)) {
 				continue;
