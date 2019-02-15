@@ -86,6 +86,22 @@ public class HomoCommand implements CommandExecutor {
 				return;
 			}
 
+			if (args[1].equalsIgnoreCase("update")) {
+
+				new Thread() {
+					@Override
+					public void run() {
+						p.sendMessage(ChatColor.GREEN + "更新しています...");
+						Homos.getMedianManager().updateMedian();
+						p.sendMessage(ChatColor.GREEN + "完了！ 現在のチケット価格は " + ChatColor.RED
+								+ Homos.getMedianManager().getCurrentMedian()
+								+ ChatColor.GREEN + " です。");
+					}
+				}.start();
+
+				return;
+			}
+
 			getTicketValueHelpMSG(label).send(p);
 
 			return;

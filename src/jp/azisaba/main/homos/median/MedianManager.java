@@ -87,7 +87,7 @@ public class MedianManager {
 		return getMedianData().isBoosting();
 	}
 
-	public void updateMedian() {
+	public synchronized void updateMedian() {
 		MedianUtils.update();
 	}
 
