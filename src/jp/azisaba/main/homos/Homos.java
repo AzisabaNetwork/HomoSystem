@@ -13,6 +13,7 @@ import jp.azisaba.main.homos.listeners.JoinListener;
 import jp.azisaba.main.homos.listeners.MedianUpdateListener;
 import jp.azisaba.main.homos.median.MedianManager;
 import jp.azisaba.main.homos.median.MedianUpdateTask;
+import jp.azisaba.main.homos.utils.Advancement;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 
@@ -37,6 +38,7 @@ public class Homos extends JavaPlugin {
 			}
 		}
 
+		Advancement.init(this);
 		SQLManager.init(this);
 		medianManager = new MedianManager(this);
 
