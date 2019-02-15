@@ -209,8 +209,9 @@ public class HomoCommand implements CommandExecutor {
 						+ StringUtils.repeat("-", 15));
 		msg.newline();
 
-		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " median" + ChatColor.GRAY + " - 中央値の設定、表示")
-				.runCommand("/" + label + " median").newline();
+		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue" + ChatColor.GRAY
+				+ " - 中央値の設定、表示")
+				.runCommand("/" + label + " ticketvalue").newline();
 		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " user [user]" + ChatColor.GRAY
 				+ " - ユーザーデータの表示")
 				.suggestCommand("/" + label + " user ").newline();
@@ -228,9 +229,12 @@ public class HomoCommand implements CommandExecutor {
 		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue view" + ChatColor.GRAY
 				+ " - 現在の中央値の表示").runCommand("/" + label + " ticketvalue view").newline();
 		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue lock [value]" + ChatColor.GRAY
-				+ " - 指定した値で固定 (未指定で現在の値)").suggestCommand("/" + label + " ticketvalue lock ").newline();
+				+ " - 指定した値で固定 " + ChatColor.GRAY + "(未指定で現在の値)").suggestCommand("/" + label + " ticketvalue lock ")
+				.newline();
 		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue unlock" + ChatColor.GRAY
 				+ " - 値の固定を解除").runCommand("/" + label + " ticketvalue unlock").newline();
+		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " ticketvalue update" + ChatColor.GRAY
+				+ " - 価格を更新").runCommand("/" + label + " ticketvalue update").newline();
 		msg.then(ChatColor.LIGHT_PURPLE + StringUtils.repeat("-", 37));
 		return msg;
 	}
