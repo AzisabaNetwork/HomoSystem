@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import jp.azisaba.main.homos.commands.HomoCommand;
-import jp.azisaba.main.homos.database.SQLDataManager;
+import jp.azisaba.main.homos.database.SQLManager;
 import jp.azisaba.main.homos.listeners.JoinListener;
 import jp.azisaba.main.homos.listeners.MedianUpdateListener;
 import jp.azisaba.main.homos.median.MedianManager;
@@ -37,7 +37,7 @@ public class Homos extends JavaPlugin {
 			}
 		}
 
-		SQLDataManager.init(this);
+		SQLManager.init(this);
 		medianManager = new MedianManager(this);
 
 		Bukkit.getPluginManager().registerEvents(new JoinListener(this), this);
@@ -54,10 +54,10 @@ public class Homos extends JavaPlugin {
 
 		Bukkit.getLogger().info(getName() + " enabled.");
 
-		List<String> columns = SQLDataManager.getSQL().getColumnsFromMoneyData();
+		List<String> columns = SQLManager.getColumnsFromMoneyData();
 
 		if (!columns.contains(config.serverName) && !config.serverName.equalsIgnoreCase("unknown")) {
-			SQLDataManager.getSQL().addMoneyDataColmun(config.serverName);
+			SQLManager.addMoneyDataColmun(config.serverName);
 		}
 	}
 
@@ -80,8 +80,8 @@ public class Homos extends JavaPlugin {
 		Homos.config = new HOMOsConfig(this);
 		Homos.config.loadConfig();
 
-		SQLDataManager.closeAll();
-		SQLDataManager.init(this);
+		SQLManager.closeAll();
+		SQLManager.init(this);
 
 		if (this.task != null) {
 			this.task.cancel();

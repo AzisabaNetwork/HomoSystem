@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import jp.azisaba.main.homos.Homos;
-import jp.azisaba.main.homos.database.SQLDataManager;
+import jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class JoinListener implements Listener {
 
@@ -24,7 +24,7 @@ public class JoinListener implements Listener {
 		}
 
 		Player p = e.getPlayer();
-		boolean success = SQLDataManager.updatePlayerData(p.getUniqueId(), p.getName(), System.currentTimeMillis());
+		boolean success = PlayerDataManager.updatePlayerData(p.getUniqueId(), p.getName(), System.currentTimeMillis());
 
 		if (!success) {
 			plugin.getLogger().warning("プレイヤーデータの更新に失敗しました");

@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.Median;
-import jp.azisaba.main.homos.database.SQLDataManager;
+import jp.azisaba.main.homos.database.SQLManager;
 import jp.azisaba.main.homos.database.SQLHandler;
 import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
@@ -37,7 +37,8 @@ public class MedianManager {
 			}
 		}
 
-		SQLHandler sql = SQLDataManager.getSQL();
+		@SuppressWarnings("deprecation")
+		SQLHandler sql = SQLManager.getSQL();
 		boolean success = sql.executeCommand(
 				"INSERT INTO " + sql.getMedianTableName() + " (server, median) VALUES ('" + serverName + "', "
 						+ value + ") ON DUPLICATE KEY UPDATE median=VALUES(median);");
@@ -51,7 +52,8 @@ public class MedianManager {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
 		}
 
-		SQLHandler sql = SQLDataManager.getSQL();
+		@SuppressWarnings("deprecation")
+		SQLHandler sql = SQLManager.getSQL();
 
 		int num = 0;
 		if (enable) {
@@ -70,7 +72,8 @@ public class MedianManager {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
 		}
 
-		SQLHandler sql = SQLDataManager.getSQL();
+		@SuppressWarnings("deprecation")
+		SQLHandler sql = SQLManager.getSQL();
 
 		int num = 0;
 		if (lock) {
@@ -105,6 +108,9 @@ public class MedianManager {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
 		}
 
-		return SQLDataManager.getSQL().getMedianData(serverName);
+		@SuppressWarnings("deprecation")
+		SQLHandler sql = SQLManager.getSQL();
+
+		return sql.getMedianData(serverName);
 	}
 }

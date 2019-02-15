@@ -9,7 +9,8 @@ import org.bukkit.entity.Player;
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.JSONMessage;
 import jp.azisaba.main.homos.classes.PlayerData;
-import jp.azisaba.main.homos.database.SQLDataManager;
+import jp.azisaba.main.homos.database.PlayerDataManager;
+import jp.azisaba.main.homos.database.TicketManager;
 import net.md_5.bungee.api.ChatColor;
 
 public class HomoCommand implements CommandExecutor {
@@ -115,7 +116,7 @@ public class HomoCommand implements CommandExecutor {
 			}
 
 			String user = args[1];
-			PlayerData data = SQLDataManager.getPlayerData(user);
+			PlayerData data = PlayerDataManager.getPlayerData(user);
 			if (data.getUuid() == null) {
 				p.sendMessage(ChatColor.RED + "プレイヤーが見つかりませんでした。");
 				return;
@@ -153,7 +154,7 @@ public class HomoCommand implements CommandExecutor {
 					return;
 				}
 
-				SQLDataManager.addTicket(data.getUuid(), num);
+				TicketManager.addTicket(data.getUuid(), num);
 
 				p.sendMessage(ChatColor.GREEN + "チケットを" + ChatColor.YELLOW + (data.getTickets() + num) + ChatColor.GREEN
 						+ "枚に変更しました。");
@@ -186,7 +187,7 @@ public class HomoCommand implements CommandExecutor {
 					return;
 				}
 
-				SQLDataManager.removeTicket(data.getUuid(), num);
+				TicketManager.removeTicket(data.getUuid(), num);
 
 				p.sendMessage(ChatColor.GREEN + "チケットを" + ChatColor.YELLOW + (data.getTickets() - num) + ChatColor.GREEN
 						+ "枚に変更しました。");

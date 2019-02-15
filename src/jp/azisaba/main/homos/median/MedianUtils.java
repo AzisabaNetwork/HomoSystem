@@ -6,7 +6,7 @@ import java.util.List;
 
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.PlayerData;
-import jp.azisaba.main.homos.database.SQLDataManager;
+import jp.azisaba.main.homos.database.PlayerDataManager;
 import net.milkbowl.vault.economy.Economy;
 
 public class MedianUtils {
@@ -25,7 +25,7 @@ public class MedianUtils {
 			return;
 		}
 
-		List<PlayerData> playerDataList = SQLDataManager.getPlayerDataListBefore30Days();
+		List<PlayerData> playerDataList = PlayerDataManager.getPlayerDataListBefore30Days();
 		List<Double> moneyList = new ArrayList<>();
 
 		for (PlayerData data : playerDataList) {
