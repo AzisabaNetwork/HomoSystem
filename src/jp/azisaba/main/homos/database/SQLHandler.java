@@ -78,6 +78,7 @@ public class SQLHandler {
 		return success;
 	}
 
+	@Deprecated
 	public synchronized ResultSet executeQuery(String str) {
 		ResultSet set = null;
 		Statement stm = null;
@@ -92,6 +93,15 @@ public class SQLHandler {
 		}
 
 		return set;
+	}
+
+	protected Statement createStatement() {
+		try {
+			return con.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public int getTickets(UUID uuid) {
@@ -235,7 +245,7 @@ public class SQLHandler {
 		return moneydata_table;
 	}
 
-	private boolean closeStatement(Statement stm) {
+	public static boolean closeStatement(Statement stm) {
 		try {
 			if (stm != null && !stm.isClosed()) {
 				stm.close();

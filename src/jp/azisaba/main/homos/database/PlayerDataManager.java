@@ -1,7 +1,7 @@
 package jp.azisaba.main.homos.database;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -59,9 +59,11 @@ public class PlayerDataManager {
 						* 30L/**days*/
 				));
 
-		ResultSet set = sql.executeQuery(cmd);
+		Statement stm = sql.createStatement();
 
 		try {
+
+			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {
 				UUID uuid = UUID.fromString(set.getString("uuid"));
@@ -74,11 +76,10 @@ public class PlayerDataManager {
 				playerDataList.add(data);
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+		} finally {
+			SQLHandler.closeStatement(stm);
 		}
 
 		return playerDataList;
@@ -95,21 +96,23 @@ public class PlayerDataManager {
 		int tickets = -1;
 		long lastjoin = -1;
 
+		Statement stm = sql.createStatement();
+
 		try {
 
 			ResultSet playerDataSet = null;
 
 			if (data.getUuid() != null) {
-				playerDataSet = sql
-						.executeQuery(
-								"select name, tickets, lastjoin from " + sql.getTicketTableName() + " where uuid = '"
-										+ data.getUuid().toString() + "'");
+
+				String cmd = "select name, tickets, lastjoin from " + sql.getTicketTableName() + " where uuid = '"
+						+ data.getUuid().toString() + "'";
+				playerDataSet = stm.executeQuery(cmd);
 			} else if (data.getName() != null) {
 
 				String playerDataCmd = "SELECT (uuid, tickets, lastjoin) from " + sql.getTicketTableName()
 						+ " where name='"
 						+ data.getName() + "' LIMIT 0, 1";
-				playerDataSet = sql.executeQuery(playerDataCmd);
+				playerDataSet = stm.executeQuery(playerDataCmd);
 			}
 
 			if (playerDataSet.next()) {
@@ -129,7 +132,7 @@ public class PlayerDataManager {
 
 			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromMedianData()) + ") from "
 					+ sql.getMoneyTableName() + " where uuid='" + data.getUuid().toString() + "';";
-			ResultSet moneyDataSet = sql.executeQuery(moneyDataCmd);
+			ResultSet moneyDataSet = stm.executeQuery(moneyDataCmd);
 
 			if (moneyDataSet.next()) {
 
@@ -146,6 +149,8 @@ public class PlayerDataManager {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			SQLHandler.closeStatement(stm);
 		}
 
 		if (!updated) {

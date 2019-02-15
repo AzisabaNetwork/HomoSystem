@@ -1,6 +1,7 @@
 package jp.azisaba.main.homos.database;
 
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,9 +73,11 @@ public class SQLManager {
 
 		List<String> colmnList = new ArrayList<>();
 
+		Statement stm = sql.createStatement();
+
 		try {
 			String cmd = "select server from " + sql.getMedianTableName() + ";";
-			ResultSet set = sql.executeQuery(cmd);
+			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {
 				String server = set.getString("server");
@@ -83,6 +86,8 @@ public class SQLManager {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			SQLHandler.closeStatement(stm);
 		}
 
 		return colmnList;
@@ -91,10 +96,12 @@ public class SQLManager {
 	public static List<String> getColumnsFromMoneyData() {
 
 		List<String> colmnList = new ArrayList<>();
+		Statement stm = sql.createStatement();
+
 		try {
 
 			String cmd = "show columns from " + sql.getMoneyTableName() + ";";
-			ResultSet set = sql.executeQuery(cmd);
+			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {
 				String column = set.getString("Field");
@@ -109,6 +116,8 @@ public class SQLManager {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			SQLHandler.closeStatement(stm);
 		}
 
 		return colmnList;
