@@ -46,7 +46,9 @@ public class SQLHandler {
 
 		try {
 			con = DriverManager.getConnection(
-					"jdbc:mysql://" + ip + ":" + port + "/" + database + "?autoReconnect=true&useSSL=false", user,
+					"jdbc:mysql://" + ip + ":" + port + "/" + database
+							+ "?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true",
+					user,
 					password);
 		} catch (SQLException e) {
 			plugin.getLogger().warning("Failed to connect to SQL database.");
