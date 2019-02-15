@@ -24,6 +24,10 @@ public class MedianManager {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
 		}
 
+		if (getCurrentMedian() == value) {
+			return false;
+		}
+
 		if (fireEvent) {
 			TicketValueUpdateEvent event = new TicketValueUpdateEvent(value);
 			Bukkit.getPluginManager().callEvent(event);
