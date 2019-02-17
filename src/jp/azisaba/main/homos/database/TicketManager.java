@@ -9,8 +9,8 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import jp.azisaba.main.homos.classes.TicketValueData;
 import jp.azisaba.main.homos.classes.PlayerData;
+import jp.azisaba.main.homos.classes.TicketValueData;
 
 public class TicketManager {
 
@@ -81,7 +81,13 @@ public class TicketManager {
 			return BigDecimal.valueOf(-1);
 		}
 
-		BigDecimal value = money.divide(new BigDecimal(data.getTickets()), 2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal tickets = new BigDecimal(data.getTickets());
+
+		if (tickets.compareTo(BigDecimal.ZERO) <= 0) {
+			return BigDecimal.ZERO;
+		}
+
+		BigDecimal value = money.divide(tickets, 2, BigDecimal.ROUND_HALF_UP);
 		value = value.multiply(new BigDecimal(amount)).multiply(BigDecimal.valueOf(0.9));
 
 		return value;
