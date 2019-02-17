@@ -29,7 +29,7 @@ public class TicketManager {
 	public static boolean removeTicket(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		if (BigInteger.valueOf(sql.getTickets(uuid)).subtract(value).compareTo(BigInteger.ZERO) < 0) {
+		if (sql.getTickets(uuid).subtract(value).compareTo(BigInteger.ZERO) < 0) {
 			throw new IllegalArgumentException("Value must be greater than the player has.");
 		}
 
@@ -56,8 +56,8 @@ public class TicketManager {
 			return BigDecimal.valueOf(-1);
 		}
 
-		BigDecimal ticketValue = new BigDecimal(money).divide(new BigDecimal(data.getTickets()))
-				.multiply(new BigDecimal(value));
+		BigDecimal ticketValue = new BigDecimal(money)
+				.divide(new BigDecimal(data.getTickets()), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(value));
 
 		return ticketValue;
 	}
@@ -65,9 +65,14 @@ public class TicketManager {
 	public static BigDecimal valueOfTicketsToConvertMoney(UUID uuid, String server, BigInteger amount) {
 		PlayerData data = PlayerDataManager.getPlayerData(uuid);
 
-		BigDecimal money = new BigDecimal(data.getMoney(server));
+		BigDecimal money;
+		if (server != null) {
+			money = new BigDecimal(data.getMoney(server));
+		} else {
+			money = new BigDecimal(data.getMoney());
+		}
 
-		if (money.compareTo(BigDecimal.valueOf(0)) < 0) {
+		if (money.compareTo(BigDecimal.ZERO) < 0) {
 
 			if (!SQLManager.getColumnsFromMedianData().contains(server)) {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
@@ -76,7 +81,7 @@ public class TicketManager {
 			return BigDecimal.valueOf(-1);
 		}
 
-		BigDecimal value = money.divide(new BigDecimal(data.getTickets()));
+		BigDecimal value = money.divide(new BigDecimal(data.getTickets()), 2, BigDecimal.ROUND_HALF_UP);
 		value = value.multiply(new BigDecimal(amount)).multiply(BigDecimal.valueOf(0.9));
 
 		return value;

@@ -105,8 +105,8 @@ public class SQLHandler {
 		}
 	}
 
-	public int getTickets(UUID uuid) {
-		int tickets = -1;
+	public BigInteger getTickets(UUID uuid) {
+		BigInteger tickets = BigInteger.valueOf(-1);
 		Statement stm = null;
 
 		try {
@@ -117,7 +117,7 @@ public class SQLHandler {
 							"select tickets from " + ticketdata_table + " where uuid = '" + uuid.toString() + "'");
 
 			if (set.next()) {
-				tickets = set.getInt("tickets");
+				tickets = new BigInteger(set.getString("tickets"));
 			}
 
 		} catch (Exception e) {

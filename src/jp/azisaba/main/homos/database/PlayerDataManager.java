@@ -142,7 +142,7 @@ public class PlayerDataManager {
 				for (String str : columnList) {
 					BigInteger value = new BigInteger(moneyDataSet.getString(str));
 
-					if (value.compareTo(BigInteger.ZERO) < 0) {
+					if (value.compareTo(BigInteger.ZERO) >= 0) {
 						data.setMoney(str, value);
 					}
 				}

@@ -65,7 +65,7 @@ public class PlayerData {
 
 	public BigInteger getMoney(String server) {
 
-		if (server == null || server.equals("null")) {
+		if (server == null) {
 
 			if (Homos.config.serverName != null) {
 				return getMoney(Homos.config.serverName);
