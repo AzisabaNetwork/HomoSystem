@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.PlayerDataManager;
@@ -20,7 +22,7 @@ public class TicketValueUtils {
 		}
 
 		boolean boost = false;
-		double median = -1d;
+		BigDecimal median = BigDecimal.valueOf(-1);
 		Economy econ = Homos.getEconomy();
 
 		if (econ == null) {
@@ -28,7 +30,7 @@ public class TicketValueUtils {
 		}
 
 		List<PlayerData> playerDataList = PlayerDataManager.getPlayerDataListBefore30Days();
-		List<Double> moneyList = new ArrayList<>();
+		List<BigDecimal> moneyList = new ArrayList<>();
 
 		for (PlayerData data : playerDataList) {
 
@@ -46,42 +48,50 @@ public class TicketValueUtils {
 				continue;
 			}
 
-			moneyList.add(value);
+			BigDecimal money = BigDecimal.valueOf(value);
+			BigInteger ticketMoney = data.getMoney();
+
+			BigDecimal total = money.add(new BigDecimal(ticketMoney));
+
+			Bukkit.getLogger().info(data.getName() + ": " + total.toString());
+
+			moneyList.add(total);
 		}
 
 		if (moneyList.size() > 10) {
-			Collections.sort(moneyList);
+			Collections.sort(moneyList, Collections.reverseOrder());
 
 			if (moneyList.size() % 2 == 0) {
-				double before = moneyList.get(moneyList.size() / 2);
-				double after = moneyList.get((moneyList.size() / 2) + 1);
+				BigDecimal before = moneyList.get(moneyList.size() / 2);
+				BigDecimal after = moneyList.get((moneyList.size() / 2) + 1);
 
-				median = (before + after) / 2;
+				median = (before.add(after)).divide(BigDecimal.valueOf(2));
 			} else {
 				median = moneyList.get((int) (moneyList.size() / 2 + 0.5));
 			}
 		} else {
-			median = 100000;
+			median = BigDecimal.valueOf(100000);
 			boost = true;
 		}
 
-		if (median <= 1000) {
-			median = 100000;
+		if (median.compareTo(BigDecimal.valueOf(1000)) <= 0) {
+			median = BigDecimal.valueOf(100000);
 			boost = true;
 		}
 
-		double ticketValue = median / 1000;
+		BigDecimal ticketValue = median.divide(BigDecimal.valueOf(1000));
 
 		if (new BigDecimal(Homos.getTicketValueManager().getCurrentTicketValue())
-				.compareTo(BigDecimal.valueOf(ticketValue)) == 0) {
+				.compareTo(ticketValue) == 0) {
 			return;
 		}
 
 		if (Homos.getTicketValueManager().isBoostMode()) {
-			boost = ticketValue < 5000;
+			boost = ticketValue.compareTo(BigDecimal.valueOf(5000)) < 0;
 		}
 
-		Homos.getTicketValueManager().updateTicketValue(BigInteger.valueOf((int) Math.floor(ticketValue)), true);
+		Homos.getTicketValueManager().updateTicketValue(ticketValue.setScale(0, BigDecimal.ROUND_DOWN).toBigInteger(),
+				true);
 		Homos.getTicketValueManager().setBoostMode(boost, true);
 
 	}

@@ -68,11 +68,9 @@ public class PlayerDataManager {
 
 			while (set.next()) {
 				UUID uuid = UUID.fromString(set.getString("uuid"));
-				String name = set.getString("name");
-				BigInteger tickets = new BigInteger(set.getString("tickets"));
-				long lastjoin = set.getLong("lastjoin");
 
-				PlayerData data = new PlayerData(uuid, name, tickets, lastjoin);
+				PlayerData data = new PlayerData(uuid, BigInteger.ZERO);
+				setUpPlayerData(data);
 
 				playerDataList.add(data);
 			}
@@ -140,6 +138,7 @@ public class PlayerDataManager {
 				List<String> columnList = SQLManager.getColumnsFromTicketValueData();
 
 				for (String str : columnList) {
+
 					BigInteger value = new BigInteger(moneyDataSet.getString(str));
 
 					if (value.compareTo(BigInteger.ZERO) >= 0) {
