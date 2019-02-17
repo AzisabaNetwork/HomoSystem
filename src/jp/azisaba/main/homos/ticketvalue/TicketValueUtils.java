@@ -44,14 +44,14 @@ public class TicketValueUtils {
 			@SuppressWarnings("deprecation")
 			double value = econ.getBalance(data.getName());
 
-			if (!isTargetValue(value)) {
-				continue;
-			}
-
 			BigDecimal money = BigDecimal.valueOf(value);
 			BigInteger ticketMoney = data.getMoney();
 
 			BigDecimal total = money.add(new BigDecimal(ticketMoney));
+
+			if (!isTargetValue(total)) {
+				continue;
+			}
 
 			Bukkit.getLogger().info(data.getName() + ": " + total.toString());
 
@@ -96,8 +96,8 @@ public class TicketValueUtils {
 
 	}
 
-	private static boolean isTargetValue(double value) {
-		if (value <= 500) {
+	private static boolean isTargetValue(BigDecimal value) {
+		if (value.compareTo(BigDecimal.valueOf(500)) <= 0) {
 			return false;
 		}
 		return true;
