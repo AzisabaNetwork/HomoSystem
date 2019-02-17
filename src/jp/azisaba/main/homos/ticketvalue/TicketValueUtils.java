@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.PlayerDataManager;
@@ -52,8 +50,6 @@ public class TicketValueUtils {
 			if (!isTargetValue(total)) {
 				continue;
 			}
-
-			Bukkit.getLogger().info(data.getName() + ": " + total.toString());
 
 			moneyList.add(total);
 		}
