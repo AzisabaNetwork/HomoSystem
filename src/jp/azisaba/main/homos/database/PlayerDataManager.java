@@ -108,7 +108,7 @@ public class PlayerDataManager {
 				playerDataSet = stm.executeQuery(cmd);
 			} else if (data.getName() != null) {
 
-				String playerDataCmd = "SELECT (uuid, tickets, lastjoin) from " + sql.getTicketTableName()
+				String playerDataCmd = "SELECT uuid, tickets, lastjoin from " + sql.getTicketTableName()
 						+ " where name='"
 						+ data.getName() + "' LIMIT 0, 1";
 				playerDataSet = stm.executeQuery(playerDataCmd);

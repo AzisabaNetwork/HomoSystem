@@ -41,7 +41,7 @@ public class SQLManager {
 				"  `lastjoin` bigint(20) NOT NULL DEFAULT '0'," +
 				"  PRIMARY KEY (`uuid`)," +
 				"  UNIQUE KEY `uuid_UNIQUE` (`uuid`)" +
-				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+				") ENGINE=InnoDB;";
 
 		String createTicketValue = "CREATE TABLE IF NOT EXISTS `ticketvalue` (" +
 				"  `server` varchar(32) NOT NULL," +
@@ -50,12 +50,12 @@ public class SQLManager {
 				"  `boost` tinyint(1) DEFAULT '0'," +
 				"  PRIMARY KEY (`server`)," +
 				"  UNIQUE KEY `server_UNIQUE` (`server`)" +
-				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+				") ENGINE=InnoDB;";
 
 		String createMoneyData = "CREATE TABLE IF NOT EXISTS `moneydata` (" +
 				"  `uuid` varchar(36) NOT NULL," +
 				"  PRIMARY KEY (`uuid`)" +
-				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+				") ENGINE=InnoDB;";
 
 		boolean success1 = sql.executeCommand(createTicketData);
 		boolean success2 = sql.executeCommand(createTicketValue);
