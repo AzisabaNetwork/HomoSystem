@@ -10,16 +10,16 @@ import org.bukkit.scheduler.BukkitTask;
 import jp.azisaba.main.homos.commands.HomoCommand;
 import jp.azisaba.main.homos.database.SQLManager;
 import jp.azisaba.main.homos.listeners.JoinListener;
-import jp.azisaba.main.homos.listeners.MedianUpdateListener;
-import jp.azisaba.main.homos.median.MedianManager;
-import jp.azisaba.main.homos.median.MedianUpdateTask;
+import jp.azisaba.main.homos.listeners.TicketValueUpdateListener;
+import jp.azisaba.main.homos.ticketvalue.TicketValueManager;
+import jp.azisaba.main.homos.ticketvalue.TicketValueUpdateTask;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 
 public class Homos extends JavaPlugin {
 
 	public static HOMOsConfig config;
-	private static MedianManager medianManager;
+	private static TicketValueManager ticketValueManager;
 	private BukkitTask task;
 	private static Economy econ;
 
@@ -38,18 +38,18 @@ public class Homos extends JavaPlugin {
 		}
 
 		SQLManager.init(this);
-		medianManager = new MedianManager(this);
+		ticketValueManager = new TicketValueManager(this);
 
 		Bukkit.getPluginManager().registerEvents(new JoinListener(this), this);
-		Bukkit.getPluginManager().registerEvents(new MedianUpdateListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new TicketValueUpdateListener(this), this);
 
 		Bukkit.getPluginCommand("homo").setExecutor(new HomoCommand());
 		Bukkit.getPluginCommand("homo")
 				.setPermissionMessage(ChatColor.GREEN + "おっと！ " + ChatColor.RED + "あなたには権限がありません！");
 
 		if (config.hasEconomy) {
-			this.task = new MedianUpdateTask().runTaskTimerAsynchronously(this, 20,
-					(long) (20 * config.updateMedianSeconds));
+			this.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
+					(long) (20 * config.updateTicketValueSeconds));
 		}
 
 		Bukkit.getLogger().info(getName() + " enabled.");
@@ -61,8 +61,8 @@ public class Homos extends JavaPlugin {
 		}
 	}
 
-	public static MedianManager getMedianManager() {
-		return medianManager;
+	public static TicketValueManager getTicketValueManager() {
+		return ticketValueManager;
 	}
 
 	@Override
@@ -71,12 +71,6 @@ public class Homos extends JavaPlugin {
 	}
 
 	public void reloadPlugin() {
-
-		reloadConfig();
-
-		getConfig().set("SystemData.LockMedian", medianManager.isLocked());
-		saveConfig();
-
 		Homos.config = new HOMOsConfig(this);
 		Homos.config.loadConfig();
 
@@ -89,7 +83,7 @@ public class Homos extends JavaPlugin {
 		}
 
 		if (config.hasEconomy) {
-			this.task = new MedianUpdateTask().runTaskTimerAsynchronously(this, 0, 60 * 20);
+			this.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 0, 60 * 20);
 		}
 	}
 

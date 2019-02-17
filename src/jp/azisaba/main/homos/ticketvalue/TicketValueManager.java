@@ -1,32 +1,32 @@
-package jp.azisaba.main.homos.median;
+package jp.azisaba.main.homos.ticketvalue;
 
 import java.math.BigInteger;
 
 import org.bukkit.Bukkit;
 
 import jp.azisaba.main.homos.Homos;
-import jp.azisaba.main.homos.classes.Median;
+import jp.azisaba.main.homos.classes.TicketValueData;
 import jp.azisaba.main.homos.database.SQLHandler;
 import jp.azisaba.main.homos.database.SQLManager;
 import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
-public class MedianManager {
+public class TicketValueManager {
 
 	@SuppressWarnings("unused")
 	private Homos plugin;
 
-	public MedianManager(Homos plugin) {
+	public TicketValueManager(Homos plugin) {
 		this.plugin = plugin;
 	}
 
-	public boolean updateMedian(BigInteger value, boolean fireEvent) {
+	public boolean updateTicketValue(BigInteger value, boolean fireEvent) {
 
 		String serverName = Homos.config.serverName;
 		if (serverName.equalsIgnoreCase("unknown")) {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
 		}
 
-		if (getCurrentMedian().compareTo(value) == 0) {
+		if (getCurrentTicketValue().compareTo(value) == 0) {
 			return false;
 		}
 
@@ -42,8 +42,8 @@ public class MedianManager {
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
 		boolean success = sql.executeCommand(
-				"INSERT INTO " + sql.getMedianTableName() + " (server, median) VALUES ('" + serverName + "', "
-						+ value.toString() + ") ON DUPLICATE KEY UPDATE median=VALUES(median);");
+				"INSERT INTO " + sql.getTicketValueTableName() + " (server, value) VALUES ('" + serverName + "', "
+						+ value.toString() + ") ON DUPLICATE KEY UPDATE value=VALUES(value);");
 
 		return success;
 	}
@@ -63,7 +63,7 @@ public class MedianManager {
 		}
 
 		boolean success = sql.executeCommand(
-				"INSERT INTO " + sql.getMedianTableName() + " (server, boost) VALUES ('" + serverName + "', "
+				"INSERT INTO " + sql.getTicketValueTableName() + " (server, boost) VALUES ('" + serverName + "', "
 						+ num + ") ON DUPLICATE KEY UPDATE boost=VALUES(boost);");
 		return success;
 	}
@@ -83,28 +83,28 @@ public class MedianManager {
 		}
 
 		boolean success = sql.executeCommand(
-				"INSERT INTO " + sql.getMedianTableName() + " (server, locked) VALUES ('" + serverName + "', "
+				"INSERT INTO " + sql.getTicketValueTableName() + " (server, locked) VALUES ('" + serverName + "', "
 						+ num + ") ON DUPLICATE KEY UPDATE locked=VALUES(locked);");
 		return success;
 	}
 
 	public boolean isLocked() {
-		return getMedianData().isLocked();
+		return getTicketValueData().isLocked();
 	}
 
 	public boolean isBoostMode() {
-		return getMedianData().isBoosting();
+		return getTicketValueData().isBoosting();
 	}
 
-	public synchronized void updateMedian() {
-		MedianUtils.update();
+	public synchronized void updateTicketValue() {
+		TicketValueUtils.update();
 	}
 
-	public BigInteger getCurrentMedian() {
-		return getMedianData().getMedian();
+	public BigInteger getCurrentTicketValue() {
+		return getTicketValueData().getTicketValue();
 	}
 
-	private Median getMedianData() {
+	private TicketValueData getTicketValueData() {
 		String serverName = Homos.config.serverName;
 		if (serverName.equalsIgnoreCase("unknown")) {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
@@ -113,6 +113,6 @@ public class MedianManager {
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
 
-		return sql.getMedianData(serverName);
+		return sql.getTicketValueData(serverName);
 	}
 }

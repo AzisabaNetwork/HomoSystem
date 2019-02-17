@@ -36,10 +36,10 @@ public class HOMOsConfig {
 	@ConfigOptions(path = "RecordPlayerJoin")
 	public boolean recordJoin = false;
 
-	@ConfigOptions(path = "Median.HasEconomy")
+	@ConfigOptions(path = "TicketValue.HasEconomy")
 	public boolean hasEconomy = true;
-	@ConfigOptions(path = "Median.UpdateMedianSeconds")
-	public int updateMedianSeconds = 60 * 5;
+	@ConfigOptions(path = "TicketValue.UpdateTicketValueSeconds")
+	public int updateTicketValueSeconds = 60 * 5;
 
 	public HOMOsConfig(Homos plugin) {
 		this.plugin = plugin;

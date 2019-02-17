@@ -44,7 +44,7 @@ public class HomoCommand implements CommandExecutor {
 
 			if (args[1].equalsIgnoreCase("view")) {
 				p.sendMessage(ChatColor.YELLOW + "現在のチケット1枚当たりの値段: " + ChatColor.GREEN + ""
-						+ Homos.getMedianManager().getCurrentMedian());
+						+ Homos.getTicketValueManager().getCurrentTicketValue());
 				return;
 			}
 
@@ -53,7 +53,7 @@ public class HomoCommand implements CommandExecutor {
 				BigInteger value = BigInteger.ZERO;
 
 				if (args.length <= 2) {
-					value = Homos.getMedianManager().getCurrentMedian();
+					value = Homos.getTicketValueManager().getCurrentTicketValue();
 				} else {
 					try {
 						value = new BigInteger(args[2]);
@@ -68,24 +68,24 @@ public class HomoCommand implements CommandExecutor {
 					return;
 				}
 
-				Homos.getMedianManager().updateMedian(value, true);
-				Homos.getMedianManager().lock(true);
+				Homos.getTicketValueManager().updateTicketValue(value, true);
+				Homos.getTicketValueManager().lock(true);
 
 				p.sendMessage(ChatColor.GREEN + "" + value + ChatColor.LIGHT_PURPLE + "に固定しました。");
 				return;
 			}
 
 			if (args[1].equalsIgnoreCase("unlock")) {
-				if (!Homos.getMedianManager().isLocked()) {
+				if (!Homos.getTicketValueManager().isLocked()) {
 					p.sendMessage(ChatColor.RED + "中央値は現在固定されていません。");
 					return;
 				}
 
-				Homos.getMedianManager().lock(false);
-				Homos.getMedianManager().updateMedian();
+				Homos.getTicketValueManager().lock(false);
+				Homos.getTicketValueManager().updateTicketValue();
 
 				p.sendMessage(ChatColor.GREEN + "固定を解除しました。現在の値は" + ChatColor.LIGHT_PURPLE
-						+ Homos.getMedianManager().getCurrentMedian() + ChatColor.GREEN + "です。");
+						+ Homos.getTicketValueManager().getCurrentTicketValue() + ChatColor.GREEN + "です。");
 				return;
 			}
 
@@ -95,9 +95,9 @@ public class HomoCommand implements CommandExecutor {
 					@Override
 					public void run() {
 						p.sendMessage(ChatColor.GREEN + "更新しています...");
-						Homos.getMedianManager().updateMedian();
+						Homos.getTicketValueManager().updateTicketValue();
 						p.sendMessage(ChatColor.GREEN + "完了！ 現在のチケット価格は " + ChatColor.RED
-								+ Homos.getMedianManager().getCurrentMedian()
+								+ Homos.getTicketValueManager().getCurrentTicketValue()
 								+ ChatColor.GREEN + " です。");
 					}
 				}.start();

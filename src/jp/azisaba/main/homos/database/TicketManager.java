@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import jp.azisaba.main.homos.classes.Median;
+import jp.azisaba.main.homos.classes.TicketValueData;
 import jp.azisaba.main.homos.classes.PlayerData;
 
 public class TicketManager {
@@ -49,7 +49,7 @@ public class TicketManager {
 
 		if (money.compareTo(BigInteger.ZERO) < 0) {
 
-			if (!SQLManager.getColumnsFromMedianData().contains(server)) {
+			if (!SQLManager.getColumnsFromTicketValueData().contains(server)) {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
 			}
 
@@ -74,7 +74,7 @@ public class TicketManager {
 
 		if (money.compareTo(BigDecimal.ZERO) < 0) {
 
-			if (!SQLManager.getColumnsFromMedianData().contains(server)) {
+			if (!SQLManager.getColumnsFromTicketValueData().contains(server)) {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
 			}
 
@@ -90,12 +90,12 @@ public class TicketManager {
 	private static boolean addMoney(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		List<String> colmnList = SQLManager.getColumnsFromMedianData();
-		List<Median> medians = sql.getMedianData(colmnList.toArray(new String[colmnList.size()]));
+		List<String> colmnList = SQLManager.getColumnsFromTicketValueData();
+		List<TicketValueData> values = sql.getTicketValueData(colmnList.toArray(new String[colmnList.size()]));
 
 		List<String> addValueList = new ArrayList<>();
-		for (Median med : medians) {
-			addValueList.add("" + med.getMedian().multiply(value).toString());
+		for (TicketValueData med : values) {
+			addValueList.add("" + med.getTicketValue().multiply(value).toString());
 		}
 
 		String uuidStr = "'" + uuid.toString() + "'";
@@ -104,7 +104,7 @@ public class TicketManager {
 		builder.append("VALUES (" + uuidStr + ", " + String.join(", ", addValueList) + ") "); // values
 		builder.append("ON DUPLICATE KEY UPDATE "); // duplicate
 
-		for (Median med : medians) {
+		for (TicketValueData med : values) {
 			builder.append(med.getServerName() + "=" + med.getServerName() + "+VALUES(" + med.getServerName() + ") "); // updates
 		}
 
@@ -115,11 +115,11 @@ public class TicketManager {
 	private static boolean removeMoney(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		List<String> colmnList = SQLManager.getColumnsFromMedianData();
-		List<Median> medians = sql.getMedianData(colmnList.toArray(new String[colmnList.size()]));
+		List<String> colmnList = SQLManager.getColumnsFromTicketValueData();
+		List<TicketValueData> values = sql.getTicketValueData(colmnList.toArray(new String[colmnList.size()]));
 
 		HashMap<String, String> valueMap = new HashMap<>();
-		for (Median med : medians) {
+		for (TicketValueData med : values) {
 
 			BigDecimal valueOfTickets = valueOfTickets(uuid, med.getServerName(), value);
 
@@ -136,7 +136,7 @@ public class TicketManager {
 		builder.append("VALUES (" + uuidStr + ", " + String.join(", ", valueMap.values()) + ") "); // values
 		builder.append("ON DUPLICATE KEY UPDATE "); // duplicate
 
-		for (Median med : medians) {
+		for (TicketValueData med : values) {
 			builder.append(
 					"{SERVER}=(CASE WHEN {SERVER}-VALUES({SERVER})<0 THEN 0 ELSE {SERVER}-VALUES({SERVER}) END), "
 							.replace("{SERVER}", med.getServerName())); // updates

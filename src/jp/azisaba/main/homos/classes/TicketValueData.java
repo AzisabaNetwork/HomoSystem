@@ -2,14 +2,14 @@ package jp.azisaba.main.homos.classes;
 
 import java.math.BigInteger;
 
-public class Median {
+public class TicketValueData {
 
 	private String serverName;
 	private BigInteger median;
 	private boolean locked;
 	private boolean boost;
 
-	public Median(String serverName, BigInteger median, boolean locked, boolean boost) {
+	public TicketValueData(String serverName, BigInteger median, boolean locked, boolean boost) {
 		this.serverName = serverName;
 		this.median = median;
 		this.locked = locked;
@@ -20,7 +20,7 @@ public class Median {
 		return serverName;
 	}
 
-	public BigInteger getMedian() {
+	public BigInteger getTicketValue() {
 		return median;
 	}
 

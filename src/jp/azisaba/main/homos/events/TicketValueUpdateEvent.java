@@ -9,14 +9,14 @@ import org.bukkit.event.HandlerList;
 public class TicketValueUpdateEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private BigInteger median;
+	private BigInteger value;
 
 	public TicketValueUpdateEvent(BigInteger value) {
-		this.median = value;
+		this.value = value;
 	}
 
 	public BigInteger getValue() {
-		return median;
+		return value;
 	}
 
 	public HandlerList getHandlers() {

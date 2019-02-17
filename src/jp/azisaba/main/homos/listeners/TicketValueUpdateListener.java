@@ -7,11 +7,11 @@ import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.events.TicketToggleBoostEvent;
 import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
-public class MedianUpdateListener implements Listener {
+public class TicketValueUpdateListener implements Listener {
 
 	private Homos plugin;
 
-	public MedianUpdateListener(Homos plugin) {
+	public TicketValueUpdateListener(Homos plugin) {
 		this.plugin = plugin;
 	}
 

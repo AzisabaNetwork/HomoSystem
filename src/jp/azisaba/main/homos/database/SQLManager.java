@@ -43,9 +43,9 @@ public class SQLManager {
 				"  UNIQUE KEY `uuid_UNIQUE` (`uuid`)" +
 				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
-		String createMedian = "CREATE TABLE IF NOT EXISTS `median` (" +
+		String createTicketValue = "CREATE TABLE IF NOT EXISTS `ticketvalue` (" +
 				"  `server` varchar(32) NOT NULL," +
-				"  `median` bigint(20) DEFAULT '1000'," +
+				"  `value` bigint(20) DEFAULT '1000'," +
 				"  `locked` tinyint(1) DEFAULT '0'," +
 				"  `boost` tinyint(1) DEFAULT '0'," +
 				"  PRIMARY KEY (`server`)," +
@@ -58,7 +58,7 @@ public class SQLManager {
 				") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
 
 		boolean success1 = sql.executeCommand(createTicketData);
-		boolean success2 = sql.executeCommand(createMedian);
+		boolean success2 = sql.executeCommand(createTicketValue);
 		boolean success3 = sql.executeCommand(createMoneyData);
 
 		return success1 && success2 && success3;
@@ -69,14 +69,14 @@ public class SQLManager {
 				"ADD COLUMN `" + name + "` BIGINT(20) NULL DEFAULT 0;");
 	}
 
-	public static List<String> getColumnsFromMedianData() {
+	public static List<String> getColumnsFromTicketValueData() {
 
 		List<String> colmnList = new ArrayList<>();
 
 		Statement stm = sql.createStatement();
 
 		try {
-			String cmd = "select server from " + sql.getMedianTableName() + ";";
+			String cmd = "select server from " + sql.getTicketValueTableName() + ";";
 			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {

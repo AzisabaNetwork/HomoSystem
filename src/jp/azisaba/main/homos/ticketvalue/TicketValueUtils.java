@@ -1,4 +1,4 @@
-package jp.azisaba.main.homos.median;
+package jp.azisaba.main.homos.ticketvalue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,11 +11,11 @@ import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.PlayerDataManager;
 import net.milkbowl.vault.economy.Economy;
 
-public class MedianUtils {
+public class TicketValueUtils {
 
 	protected static void update() {
 
-		if (Homos.getMedianManager().isLocked()) {
+		if (Homos.getTicketValueManager().isLocked()) {
 			return;
 		}
 
@@ -70,18 +70,19 @@ public class MedianUtils {
 			boost = true;
 		}
 
-		median = median / 1000;
+		double ticketValue = median / 1000;
 
-		if (new BigDecimal(Homos.getMedianManager().getCurrentMedian()).compareTo(BigDecimal.valueOf(median)) == 0) {
+		if (new BigDecimal(Homos.getTicketValueManager().getCurrentTicketValue())
+				.compareTo(BigDecimal.valueOf(ticketValue)) == 0) {
 			return;
 		}
 
-		if (Homos.getMedianManager().isBoostMode()) {
-			boost = median < 5000;
+		if (Homos.getTicketValueManager().isBoostMode()) {
+			boost = ticketValue < 5000;
 		}
 
-		Homos.getMedianManager().updateMedian(BigInteger.valueOf((int) Math.floor(median)), true);
-		Homos.getMedianManager().setBoostMode(boost, true);
+		Homos.getTicketValueManager().updateTicketValue(BigInteger.valueOf((int) Math.floor(ticketValue)), true);
+		Homos.getTicketValueManager().setBoostMode(boost, true);
 
 	}
 

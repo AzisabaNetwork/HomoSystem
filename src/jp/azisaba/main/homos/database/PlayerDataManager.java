@@ -131,13 +131,13 @@ public class PlayerDataManager {
 				}
 			}
 
-			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromMedianData()) + ") from "
+			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromTicketValueData()) + ") from "
 					+ sql.getMoneyTableName() + " where uuid='" + data.getUuid().toString() + "';";
 			ResultSet moneyDataSet = stm.executeQuery(moneyDataCmd);
 
 			if (moneyDataSet.next()) {
 
-				List<String> columnList = SQLManager.getColumnsFromMedianData();
+				List<String> columnList = SQLManager.getColumnsFromTicketValueData();
 
 				for (String str : columnList) {
 					BigInteger value = new BigInteger(moneyDataSet.getString(str));

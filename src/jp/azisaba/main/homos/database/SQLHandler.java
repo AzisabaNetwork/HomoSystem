@@ -16,7 +16,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 
 import jp.azisaba.main.homos.Homos;
-import jp.azisaba.main.homos.classes.Median;
+import jp.azisaba.main.homos.classes.TicketValueData;
 
 /**
  * @author siloneco
@@ -30,7 +30,7 @@ public class SQLHandler {
 	private Connection con;
 
 	private final String ticketdata_table = "ticketdata";
-	private final String median_table = "median";
+	private final String ticketvalue_table = "ticketvalue";
 	private final String moneydata_table = "moneydata";
 
 	protected SQLHandler(Homos plugin, String ip, int port, String database, String user, String password) {
@@ -162,28 +162,28 @@ public class SQLHandler {
 		return executeCommand("ALTER TABLE `homos`.`" + getMoneyTableName() + "` DROP COLUMN `" + name + "`;");
 	}
 
-	public Median getMedianData(String serverName) {
+	public TicketValueData getTicketValueData(String serverName) {
 		Statement stm = null;
-		Median median = null;
+		TicketValueData value = null;
 
 		try {
 			stm = con.createStatement();
 
 			ResultSet set = stm
-					.executeQuery("select * from " + getMedianTableName() + " where server='" + serverName + "';");
+					.executeQuery("select * from " + getTicketValueTableName() + " where server='" + serverName + "';");
 
 			if (set.next()) {
 				String exactServerName = set.getString("server");
-				BigInteger medianNum = new BigInteger(set.getString("median"));
+				BigInteger ticketValueNum = new BigInteger(set.getString("value"));
 				boolean locked = set.getInt("locked") > 0;
 				boolean boost = set.getInt("boost") > 0;
 
-				median = new Median(exactServerName, medianNum, locked, boost);
+				value = new TicketValueData(exactServerName, ticketValueNum, locked, boost);
 			} else {
-				stm.executeUpdate("INSERT INTO " + getMedianTableName() + " (server, median) VALUES ('" + serverName
-						+ "', 1000) ON DUPLICATE KEY UPDATE median=VALUES(median);");
+				stm.executeUpdate("INSERT INTO " + getTicketValueTableName() + " (server, value) VALUES ('" + serverName
+						+ "', 1000) ON DUPLICATE KEY UPDATE value=VALUES(value);");
 
-				median = new Median(serverName, BigInteger.valueOf(1000), false, true);
+				value = new TicketValueData(serverName, BigInteger.valueOf(1000), false, true);
 			}
 
 		} catch (Exception e) {
@@ -192,12 +192,12 @@ public class SQLHandler {
 			closeStatement(stm);
 		}
 
-		return median;
+		return value;
 	}
 
-	public List<Median> getMedianData(String... servers) {
+	public List<TicketValueData> getTicketValueData(String... servers) {
 		Statement stm = null;
-		List<Median> medianList = new ArrayList<>();
+		List<TicketValueData> valueList = new ArrayList<>();
 
 		try {
 			stm = con.createStatement();
@@ -205,15 +205,15 @@ public class SQLHandler {
 			String where = "server='" + String.join("', OR server='", servers) + "'";
 
 			ResultSet set = stm
-					.executeQuery("select * from " + getMedianTableName() + " where " + where + ";");
+					.executeQuery("select * from " + getTicketValueTableName() + " where " + where + ";");
 
 			while (set.next()) {
 				String exactServerName = set.getString("server");
-				BigInteger medianNum = new BigInteger(set.getString("median"));
+				BigInteger valueNum = new BigInteger(set.getString("value"));
 				boolean locked = set.getInt("locked") > 0;
 				boolean boost = set.getInt("boost") > 0;
 
-				medianList.add(new Median(exactServerName, medianNum, locked, boost));
+				valueList.add(new TicketValueData(exactServerName, valueNum, locked, boost));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -221,7 +221,7 @@ public class SQLHandler {
 			closeStatement(stm);
 		}
 
-		return medianList;
+		return valueList;
 	}
 
 	public void closeConnection() {
@@ -238,8 +238,8 @@ public class SQLHandler {
 		return ticketdata_table;
 	}
 
-	public String getMedianTableName() {
-		return median_table;
+	public String getTicketValueTableName() {
+		return ticketvalue_table;
 	}
 
 	public String getMoneyTableName() {
