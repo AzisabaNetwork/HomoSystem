@@ -91,9 +91,6 @@ public class Homos extends JavaPlugin {
 		if (config.hasEconomy) {
 			this.task = new MedianUpdateTask().runTaskTimerAsynchronously(this, 0, 60 * 20);
 		}
-
-		medianManager.lock(getConfig().getBoolean("SystemData.LockMedian", false));
-		medianManager.updateMedian(getConfig().getInt("SystemData.Median", -1), false);
 	}
 
 	public static Economy getEconomy() {

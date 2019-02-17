@@ -1,5 +1,7 @@
 package jp.azisaba.main.homos.commands;
 
+import java.math.BigInteger;
+
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -48,20 +50,20 @@ public class HomoCommand implements CommandExecutor {
 
 			if (args[1].equalsIgnoreCase("lock")) {
 
-				int value = 0;
+				BigInteger value = BigInteger.ZERO;
 
 				if (args.length <= 2) {
 					value = Homos.getMedianManager().getCurrentMedian();
 				} else {
 					try {
-						value = Integer.parseInt(args[2]);
+						value = new BigInteger(args[2]);
 					} catch (Exception e) {
 						p.sendMessage(ChatColor.RED + "整数を入力してください。");
 						return;
 					}
 				}
 
-				if (value <= 0) {
+				if (value.compareTo(BigInteger.ZERO) <= 0) {
 					p.sendMessage(ChatColor.RED + "値は0より大きい必要があります。");
 					return;
 				}
@@ -140,24 +142,25 @@ public class HomoCommand implements CommandExecutor {
 					return;
 				}
 
-				int num = 0;
+				BigInteger num = BigInteger.ZERO;
 
 				try {
-					num = Integer.parseInt(args[3]);
+					int intNum = Integer.parseInt(args[3]);
+					num = BigInteger.valueOf(intNum);
 				} catch (Exception e) {
 					p.sendMessage(ChatColor.RED + "正しい数値を入力してください。");
 					return;
 				}
 
-				if (num < 0) {
+				if (num.compareTo(BigInteger.ZERO) < 0) {
 					p.sendMessage(ChatColor.RED + "数値は0より大きい必要があります。");
 					return;
 				}
 
 				TicketManager.addTicket(data.getUuid(), num);
 
-				p.sendMessage(ChatColor.GREEN + "チケットを" + ChatColor.YELLOW + (data.getTickets() + num) + ChatColor.GREEN
-						+ "枚に変更しました。");
+				p.sendMessage(ChatColor.GREEN + "チケットを" + ChatColor.YELLOW + data.getTickets().add(num).toString()
+						+ ChatColor.GREEN + "枚に変更しました。");
 				return;
 			}
 
@@ -168,28 +171,30 @@ public class HomoCommand implements CommandExecutor {
 					return;
 				}
 
-				int num = 0;
+				BigInteger num = BigInteger.ZERO;
 
 				try {
-					num = Integer.parseInt(args[3]);
+					int intNum = Integer.parseInt(args[3]);
+					num = BigInteger.valueOf(intNum);
 				} catch (Exception e) {
 					p.sendMessage(ChatColor.RED + "正しい数値を入力してください。");
 					return;
 				}
 
-				if (num < 0) {
+				if (num.compareTo(BigInteger.ZERO) < 0) {
 					p.sendMessage(ChatColor.RED + "数値は0より大きい必要があります。");
 					return;
 				}
 
-				if (data.getTickets() < num) {
+				if (data.getTickets().compareTo(num) < 0) {
 					p.sendMessage(ChatColor.RED + "数値はプレイヤーの現在所持しているチケット枚数より少ないか、同じである必要があります。");
 					return;
 				}
 
 				TicketManager.removeTicket(data.getUuid(), num);
 
-				p.sendMessage(ChatColor.GREEN + "チケットを" + ChatColor.YELLOW + (data.getTickets() - num) + ChatColor.GREEN
+				p.sendMessage(ChatColor.GREEN + "チケットを" + ChatColor.YELLOW + data.getTickets().subtract(num).toString()
+						+ ChatColor.GREEN
 						+ "枚に変更しました。");
 				return;
 			}

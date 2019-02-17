@@ -1,5 +1,7 @@
 package jp.azisaba.main.homos.database;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +14,11 @@ import jp.azisaba.main.homos.classes.PlayerData;
 
 public class TicketManager {
 
-	public static boolean addTicket(UUID uuid, int value) {
+	public static boolean addTicket(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		String addTicket = "INSERT INTO ticketdata (uuid, tickets) VALUES ('" + uuid.toString()
-				+ "', " + value + ") ON DUPLICATE KEY UPDATE tickets=tickets+VALUES(tickets);";
+				+ "', " + value.toString() + ") ON DUPLICATE KEY UPDATE tickets=tickets+VALUES(tickets);";
 
 		boolean success1 = sql.executeCommand(addTicket);
 		boolean success2 = addMoney(uuid, value);
@@ -24,15 +26,15 @@ public class TicketManager {
 		return success1 && success2;
 	}
 
-	public static boolean removeTicket(UUID uuid, int value) {
+	public static boolean removeTicket(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		if (sql.getTickets(uuid) - value < 0) {
+		if (BigInteger.valueOf(sql.getTickets(uuid)).subtract(value).compareTo(BigInteger.ZERO) < 0) {
 			throw new IllegalArgumentException("Value must be greater than the player has.");
 		}
 
 		String removeTicket = "INSERT INTO " + sql.getTicketTableName() + " (uuid, tickets) VALUES ('" + uuid.toString()
-				+ "', " + value + ") ON DUPLICATE KEY UPDATE tickets=tickets-VALUES(tickets);";
+				+ "', " + value.toString() + ") ON DUPLICATE KEY UPDATE tickets=tickets-VALUES(tickets);";
 
 		boolean success2 = removeMoney(uuid, value);
 		boolean success1 = sql.executeCommand(removeTicket);
@@ -40,45 +42,47 @@ public class TicketManager {
 		return success1 && success2;
 	}
 
-	public static double valueOfTickets(UUID uuid, String server, int amount) {
+	public static BigDecimal valueOfTickets(UUID uuid, String server, BigInteger value) {
 		PlayerData data = PlayerDataManager.getPlayerData(uuid);
 
-		long money = data.getMoney(server);
+		BigInteger money = data.getMoney(server);
 
-		if (money < 0) {
+		if (money.compareTo(BigInteger.ZERO) < 0) {
 
 			if (!SQLManager.getColumnsFromMedianData().contains(server)) {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
 			}
 
-			return -1d;
+			return BigDecimal.valueOf(-1);
 		}
 
-		double value = (money / data.getTickets()) * amount;
-		return value;
+		BigDecimal ticketValue = new BigDecimal(money).divide(new BigDecimal(data.getTickets()))
+				.multiply(new BigDecimal(value));
+
+		return ticketValue;
 	}
 
-	public static double valueOfTicketsToConvertMoney(UUID uuid, String server, int amount) {
+	public static BigDecimal valueOfTicketsToConvertMoney(UUID uuid, String server, BigInteger amount) {
 		PlayerData data = PlayerDataManager.getPlayerData(uuid);
 
-		long money = data.getMoney(server);
+		BigDecimal money = new BigDecimal(data.getMoney(server));
 
-		if (money < 0) {
+		if (money.compareTo(BigDecimal.valueOf(0)) < 0) {
 
 			if (!SQLManager.getColumnsFromMedianData().contains(server)) {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
 			}
 
-			return -1d;
+			return BigDecimal.valueOf(-1);
 		}
 
-		double value = money / data.getTickets();
-		value = value * amount * 0.9;
+		BigDecimal value = money.divide(new BigDecimal(data.getTickets()));
+		value = value.multiply(new BigDecimal(amount)).multiply(BigDecimal.valueOf(0.9));
 
 		return value;
 	}
 
-	private static boolean addMoney(UUID uuid, int ticketAmount) {
+	private static boolean addMoney(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		List<String> colmnList = SQLManager.getColumnsFromMedianData();
@@ -86,7 +90,7 @@ public class TicketManager {
 
 		List<String> addValueList = new ArrayList<>();
 		for (Median med : medians) {
-			addValueList.add("" + (med.getMedian() * ticketAmount));
+			addValueList.add("" + med.getMedian().multiply(value).toString());
 		}
 
 		String uuidStr = "'" + uuid.toString() + "'";
@@ -103,7 +107,7 @@ public class TicketManager {
 		return success;
 	}
 
-	private static boolean removeMoney(UUID uuid, int ticketAmount) {
+	private static boolean removeMoney(UUID uuid, BigInteger value) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		List<String> colmnList = SQLManager.getColumnsFromMedianData();
@@ -112,13 +116,13 @@ public class TicketManager {
 		HashMap<String, String> valueMap = new HashMap<>();
 		for (Median med : medians) {
 
-			double valueOfTickets = valueOfTickets(uuid, med.getServerName(), ticketAmount);
+			BigDecimal valueOfTickets = valueOfTickets(uuid, med.getServerName(), value);
 
-			if (valueOfTickets < 0) {
+			if (valueOfTickets.compareTo(BigDecimal.ZERO) < 0) {
 				continue;
 			}
 
-			valueMap.put(med.getServerName(), String.valueOf((int) Math.ceil(valueOfTickets)));
+			valueMap.put(med.getServerName(), valueOfTickets.setScale(0, BigDecimal.ROUND_DOWN).toString());
 		}
 
 		String uuidStr = "'" + uuid.toString() + "'";
@@ -138,15 +142,15 @@ public class TicketManager {
 		return success;
 	}
 
-	public static boolean addTicket(Player p, int value) {
+	public static boolean addTicket(Player p, BigInteger value) {
 		return addTicket(p.getUniqueId(), value);
 	}
 
-	public static boolean removeTicket(Player p, int value) {
+	public static boolean removeTicket(Player p, BigInteger value) {
 		return removeTicket(p.getUniqueId(), value);
 	}
 
-	public static double valueOfTickets(Player p, String server, int amount) {
+	public static BigDecimal valueOfTickets(Player p, String server, BigInteger amount) {
 		return valueOfTickets(p.getUniqueId(), server, amount);
 	}
 }

@@ -1,11 +1,13 @@
 package jp.azisaba.main.homos.median;
 
+import java.math.BigInteger;
+
 import org.bukkit.Bukkit;
 
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.Median;
-import jp.azisaba.main.homos.database.SQLManager;
 import jp.azisaba.main.homos.database.SQLHandler;
+import jp.azisaba.main.homos.database.SQLManager;
 import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
 public class MedianManager {
@@ -17,14 +19,14 @@ public class MedianManager {
 		this.plugin = plugin;
 	}
 
-	public boolean updateMedian(int value, boolean fireEvent) {
+	public boolean updateMedian(BigInteger value, boolean fireEvent) {
 
 		String serverName = Homos.config.serverName;
 		if (serverName.equalsIgnoreCase("unknown")) {
 			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
 		}
 
-		if (getCurrentMedian() == value) {
+		if (getCurrentMedian().compareTo(value) == 0) {
 			return false;
 		}
 
@@ -41,7 +43,7 @@ public class MedianManager {
 		SQLHandler sql = SQLManager.getSQL();
 		boolean success = sql.executeCommand(
 				"INSERT INTO " + sql.getMedianTableName() + " (server, median) VALUES ('" + serverName + "', "
-						+ value + ") ON DUPLICATE KEY UPDATE median=VALUES(median);");
+						+ value.toString() + ") ON DUPLICATE KEY UPDATE median=VALUES(median);");
 
 		return success;
 	}
@@ -98,7 +100,7 @@ public class MedianManager {
 		MedianUtils.update();
 	}
 
-	public int getCurrentMedian() {
+	public BigInteger getCurrentMedian() {
 		return getMedianData().getMedian();
 	}
 

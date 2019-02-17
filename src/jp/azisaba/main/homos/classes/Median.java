@@ -1,13 +1,15 @@
 package jp.azisaba.main.homos.classes;
 
+import java.math.BigInteger;
+
 public class Median {
 
 	private String serverName;
-	private int median;
+	private BigInteger median;
 	private boolean locked;
 	private boolean boost;
 
-	public Median(String serverName, int median, boolean locked, boolean boost) {
+	public Median(String serverName, BigInteger median, boolean locked, boolean boost) {
 		this.serverName = serverName;
 		this.median = median;
 		this.locked = locked;
@@ -18,7 +20,7 @@ public class Median {
 		return serverName;
 	}
 
-	public int getMedian() {
+	public BigInteger getMedian() {
 		return median;
 	}
 

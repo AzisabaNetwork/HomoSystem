@@ -1,5 +1,6 @@
 package jp.azisaba.main.homos.classes;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -9,21 +10,21 @@ public class PlayerData {
 
 	private UUID uuid;
 	private String name;
-	private int tickets;
-	private HashMap<String, Long> moneyMap = new HashMap<>();
+	private BigInteger tickets;
+	private HashMap<String, BigInteger> moneyMap = new HashMap<>();
 	private long lastJoin;
 
-	public PlayerData(UUID uuid, int tickets) {
+	public PlayerData(UUID uuid, BigInteger tickets) {
 		this.uuid = uuid;
 		this.tickets = tickets;
 	}
 
-	public PlayerData(String name, int tickets) {
+	public PlayerData(String name, BigInteger tickets) {
 		this.name = name;
 		this.tickets = tickets;
 	}
 
-	public PlayerData(UUID uuid, String name, int tickets, long lastjoin) {
+	public PlayerData(UUID uuid, String name, BigInteger tickets, long lastjoin) {
 		this.uuid = uuid;
 		this.name = name;
 		this.tickets = tickets;
@@ -46,11 +47,11 @@ public class PlayerData {
 		this.name = name;
 	}
 
-	public int getTickets() {
+	public BigInteger getTickets() {
 		return tickets;
 	}
 
-	public void setTickets(int tickets) {
+	public void setTickets(BigInteger tickets) {
 		this.tickets = tickets;
 	}
 
@@ -62,30 +63,30 @@ public class PlayerData {
 		this.lastJoin = lastJoin;
 	}
 
-	public long getMoney(String server) {
+	public BigInteger getMoney(String server) {
 
-		if (server == null) {
+		if (server == null || server.equals("null")) {
 
 			if (Homos.config.serverName != null) {
 				return getMoney(Homos.config.serverName);
 			}
 
-			return -1L;
+			return BigInteger.valueOf(-1);
 		}
 
 		if (moneyMap.containsKey(server)) {
 			return moneyMap.get(server);
 		}
 
-		return -1L;
+		return BigInteger.valueOf(-1);
 	}
 
-	public long getMoney() {
+	public BigInteger getMoney() {
 		String serverName = Homos.config.serverName;
 		return getMoney(serverName);
 	}
 
-	public void setMoney(String server, long money) {
+	public void setMoney(String server, BigInteger money) {
 		this.moneyMap.put(server, money);
 	}
 }

@@ -1,5 +1,7 @@
 package jp.azisaba.main.homos.median;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,7 +72,7 @@ public class MedianUtils {
 
 		median = median / 1000;
 
-		if (Homos.getMedianManager().getCurrentMedian() == median) {
+		if (new BigDecimal(Homos.getMedianManager().getCurrentMedian()).compareTo(BigDecimal.valueOf(median)) == 0) {
 			return;
 		}
 
@@ -78,7 +80,7 @@ public class MedianUtils {
 			boost = median < 5000;
 		}
 
-		Homos.getMedianManager().updateMedian((int) Math.floor(median), true);
+		Homos.getMedianManager().updateMedian(BigInteger.valueOf((int) Math.floor(median)), true);
 		Homos.getMedianManager().setBoostMode(boost, true);
 
 	}

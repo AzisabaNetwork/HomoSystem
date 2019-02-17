@@ -1,5 +1,7 @@
 package jp.azisaba.main.homos.events;
 
+import java.math.BigInteger;
+
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -7,13 +9,13 @@ import org.bukkit.event.HandlerList;
 public class TicketValueUpdateEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private int median;
+	private BigInteger median;
 
-	public TicketValueUpdateEvent(int median) {
-		this.median = median;
+	public TicketValueUpdateEvent(BigInteger value) {
+		this.median = value;
 	}
 
-	public int getValue() {
+	public BigInteger getValue() {
 		return median;
 	}
 

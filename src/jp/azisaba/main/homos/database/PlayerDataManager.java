@@ -1,5 +1,6 @@
 package jp.azisaba.main.homos.database;
 
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -13,21 +14,21 @@ import jp.azisaba.main.homos.classes.PlayerData;
 public class PlayerDataManager {
 
 	public static PlayerData getPlayerData(Player p) {
-		PlayerData data = new PlayerData(p.getUniqueId(), 0);
+		PlayerData data = new PlayerData(p.getUniqueId(), BigInteger.ZERO);
 
 		setUpPlayerData(data);
 		return data;
 	}
 
 	public static PlayerData getPlayerData(UUID uuid) {
-		PlayerData data = new PlayerData(uuid, 0);
+		PlayerData data = new PlayerData(uuid, BigInteger.ZERO);
 
 		setUpPlayerData(data);
 		return data;
 	}
 
 	public static PlayerData getPlayerData(String name) {
-		PlayerData data = new PlayerData(name, 0);
+		PlayerData data = new PlayerData(name, BigInteger.ZERO);
 
 		setUpPlayerData(data);
 		return data;
@@ -68,7 +69,7 @@ public class PlayerDataManager {
 			while (set.next()) {
 				UUID uuid = UUID.fromString(set.getString("uuid"));
 				String name = set.getString("name");
-				int tickets = set.getInt("tickets");
+				BigInteger tickets = new BigInteger(set.getString("tickets"));
 				long lastjoin = set.getLong("lastjoin");
 
 				PlayerData data = new PlayerData(uuid, name, tickets, lastjoin);
@@ -93,7 +94,7 @@ public class PlayerDataManager {
 
 		UUID uuid = null;
 		String name = null;
-		int tickets = -1;
+		BigInteger tickets = BigInteger.valueOf(-1);
 		long lastjoin = -1;
 
 		Statement stm = sql.createStatement();
@@ -121,11 +122,11 @@ public class PlayerDataManager {
 
 				if (data.getUuid() != null) {
 					name = playerDataSet.getString("name");
-					tickets = playerDataSet.getInt("tickets");
+					tickets = new BigInteger(playerDataSet.getString("tickets"));
 					lastjoin = playerDataSet.getLong("lastjoin");
 				} else if (data.getName() != null) {
 					uuid = UUID.fromString(playerDataSet.getString("uuid"));
-					tickets = playerDataSet.getInt("tickets");
+					tickets = new BigInteger(playerDataSet.getString("tickets"));
 					lastjoin = playerDataSet.getLong("lastjoin");
 				}
 			}
@@ -139,9 +140,9 @@ public class PlayerDataManager {
 				List<String> columnList = SQLManager.getColumnsFromMedianData();
 
 				for (String str : columnList) {
-					long value = moneyDataSet.getLong(str);
+					BigInteger value = new BigInteger(moneyDataSet.getString(str));
 
-					if (value > 0) {
+					if (value.compareTo(BigInteger.ZERO) < 0) {
 						data.setMoney(str, value);
 					}
 				}

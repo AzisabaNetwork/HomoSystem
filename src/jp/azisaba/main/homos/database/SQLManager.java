@@ -37,7 +37,7 @@ public class SQLManager {
 		String createTicketData = "CREATE TABLE IF NOT EXISTS `ticketdata` (" +
 				"  `uuid` varchar(36) NOT NULL," +
 				"  `name` text," +
-				"  `tickets` int(11) NOT NULL DEFAULT '0'," +
+				"  `tickets` bigint(20) NOT NULL DEFAULT '0'," +
 				"  `lastjoin` bigint(20) NOT NULL DEFAULT '0'," +
 				"  PRIMARY KEY (`uuid`)," +
 				"  UNIQUE KEY `uuid_UNIQUE` (`uuid`)" +

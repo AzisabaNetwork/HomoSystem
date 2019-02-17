@@ -3,6 +3,7 @@
  */
 package jp.azisaba.main.homos.database;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -173,7 +174,7 @@ public class SQLHandler {
 
 			if (set.next()) {
 				String exactServerName = set.getString("server");
-				int medianNum = set.getInt("median");
+				BigInteger medianNum = new BigInteger(set.getString("median"));
 				boolean locked = set.getInt("locked") > 0;
 				boolean boost = set.getInt("boost") > 0;
 
@@ -182,7 +183,7 @@ public class SQLHandler {
 				stm.executeUpdate("INSERT INTO " + getMedianTableName() + " (server, median) VALUES ('" + serverName
 						+ "', 1000) ON DUPLICATE KEY UPDATE median=VALUES(median);");
 
-				median = new Median(serverName, 1000, false, true);
+				median = new Median(serverName, BigInteger.valueOf(1000), false, true);
 			}
 
 		} catch (Exception e) {
@@ -208,7 +209,7 @@ public class SQLHandler {
 
 			while (set.next()) {
 				String exactServerName = set.getString("server");
-				int medianNum = set.getInt("median");
+				BigInteger medianNum = new BigInteger(set.getString("median"));
 				boolean locked = set.getInt("locked") > 0;
 				boolean boost = set.getInt("boost") > 0;
 
