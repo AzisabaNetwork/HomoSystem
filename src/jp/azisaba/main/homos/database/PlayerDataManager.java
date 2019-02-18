@@ -138,8 +138,12 @@ public class PlayerDataManager {
 				}
 			}
 
+			if (uuid == null) {
+				uuid = data.getUuid();
+			}
+
 			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromMoneyData()) + ") from "
-					+ sql.getMoneyTableName() + " where uuid='" + data.getUuid().toString() + "';";
+					+ sql.getMoneyTableName() + " where uuid='" + uuid.toString() + "';";
 			ResultSet moneyDataSet = stm.executeQuery(moneyDataCmd);
 
 			if (moneyDataSet.next()) {
