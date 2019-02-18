@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 
 import jp.azisaba.main.homos.classes.PlayerData;
@@ -42,9 +43,17 @@ public class PlayerDataManager {
 				+ "', '" + name + "', " + lastjoin
 				+ ") ON DUPLICATE KEY UPDATE name=VALUES(name), lastjoin=VALUES(lastjoin);";
 
-		boolean success = sql.executeCommand(cmd);
+		List<String> columns = SQLManager.getColumnsFromMoneyData();
 
-		return success;
+		String moneyCmd = "INSERT INTO " + sql.getMoneyTableName() + " (uuid, "
+				+ String.join(", ", SQLManager.getColumnsFromMoneyData())
+				+ ") VALUES ('" + uuid.toString() + "'" + StringUtils.repeat(", 0", columns.size())
+				+ ") ON DUPLICATE KEY UPDATE uuid=uuid;";
+
+		boolean success = sql.executeCommand(cmd);
+		boolean success2 = sql.executeCommand(moneyCmd);
+
+		return success && success2;
 	}
 
 	public static List<PlayerData> getPlayerDataListBefore30Days() {
@@ -129,13 +138,13 @@ public class PlayerDataManager {
 				}
 			}
 
-			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromTicketValueData()) + ") from "
+			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromMoneyData()) + ") from "
 					+ sql.getMoneyTableName() + " where uuid='" + data.getUuid().toString() + "';";
 			ResultSet moneyDataSet = stm.executeQuery(moneyDataCmd);
 
 			if (moneyDataSet.next()) {
 
-				List<String> columnList = SQLManager.getColumnsFromTicketValueData();
+				List<String> columnList = SQLManager.getColumnsFromMoneyData();
 
 				for (String str : columnList) {
 
