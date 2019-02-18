@@ -142,7 +142,7 @@ public class PlayerDataManager {
 				uuid = data.getUuid();
 			}
 
-			String moneyDataCmd = "select (" + String.join(", ", SQLManager.getColumnsFromMoneyData()) + ") from "
+			String moneyDataCmd = "select " + String.join(", ", SQLManager.getColumnsFromMoneyData()) + " from "
 					+ sql.getMoneyTableName() + " where uuid='" + uuid.toString() + "';";
 			ResultSet moneyDataSet = stm.executeQuery(moneyDataCmd);
 
