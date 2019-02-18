@@ -1,12 +1,19 @@
 package jp.azisaba.main.homos.commands;
 
 import java.math.BigInteger;
+import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.UserMap;
 
 import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.JSONMessage;
@@ -107,6 +114,45 @@ public class HomoCommand implements CommandExecutor {
 
 			getTicketValueHelpMSG(label).send(p);
 
+			return;
+		}
+
+		if (args[0].equalsIgnoreCase("importAll")) {
+
+			new Thread() {
+				private Player player = p;
+
+				public void run() {
+					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+
+					UserMap map = ess.getUserMap();
+					Set<UUID> uuids = map.getAllUniqueUsers();
+
+					int size = uuids.size();
+					int i = 0;
+
+					for (UUID uuid : uuids) {
+						User user = map.getUser(uuid);
+
+						String name = user.getName();
+						long lastJoin = user.getLastLogin();
+
+						PlayerDataManager.updatePlayerData(uuid, name, lastJoin);
+						i++;
+
+						if (player != null) {
+							JSONMessage.create(ChatColor.GREEN
+									+ String.format("%.2f", (((double) i / (double) size) * 100d)) + "% done.")
+									.actionbar(player);
+						}
+					}
+
+					if (player != null) {
+						JSONMessage.create("完了！").actionbar(player);
+						player.sendMessage(ChatColor.GREEN + "完了！");
+					}
+				}
+			}.start();
 			return;
 		}
 

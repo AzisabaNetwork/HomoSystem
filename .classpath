@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/siloneco/MainFile/4 Programming/Eclipse-Cooperation-Files/Vault.jar"/>
 	<classpathentry kind="lib" path="C:/Users/siloneco/MainFile/4 Programming/Eclipse-Cooperation-Files/Spigot/spigot-1.13.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/siloneco/MainFile/4 Programming/Eclipse-Cooperation-Files/EssentialsX-2.16.0.3/EssentialsX-2.16.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
