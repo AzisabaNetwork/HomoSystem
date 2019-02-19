@@ -1,6 +1,8 @@
 package jp.azisaba.main.homos.commands;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.Command;
@@ -13,6 +15,7 @@ import jp.azisaba.main.homos.JSONMessage;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.PlayerDataManager;
 import jp.azisaba.main.homos.database.TicketManager;
+import jp.azisaba.main.homos.ticketvalue.TicketValueUtils;
 import net.md_5.bungee.api.ChatColor;
 
 public class HomoCommand implements CommandExecutor {
@@ -32,6 +35,35 @@ public class HomoCommand implements CommandExecutor {
 
 		if (args.length <= 0) {
 			getMainHelpMSG(label).send(p);
+			return;
+		}
+
+		if (args[0].equalsIgnoreCase("median")) {
+
+			new Thread() {
+				Player player = p;
+
+				public void run() {
+
+					if (player != null)
+						player.sendMessage(ChatColor.GREEN + "取得しています...");
+
+					Entry<String, BigDecimal> entry = TicketValueUtils.getMedianPlayer();
+
+					if (entry == null)
+						if (player != null) {
+							player.sendMessage(ChatColor.RED + "取得に失敗しました。");
+						}
+
+					if (player != null) {
+						player.sendMessage(ChatColor.GREEN + "中央値のプレイヤー: ");
+						player.sendMessage(ChatColor.YELLOW + "Player" + ChatColor.GREEN + ": " + ChatColor.RED
+								+ entry.getKey().replace(",", ChatColor.GRAY + "," + ChatColor.RED));
+						player.sendMessage(ChatColor.YELLOW + "Value" + ChatColor.GREEN + ": " + ChatColor.RED
+								+ entry.getValue().toString());
+					}
+				}
+			}.start();
 			return;
 		}
 
@@ -110,44 +142,44 @@ public class HomoCommand implements CommandExecutor {
 			return;
 		}
 
-//		if (args[0].equalsIgnoreCase("importAll")) {
-//
-//			new Thread() {
-//				private Player player = p;
-//
-//				public void run() {
-//					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-//
-//					UserMap map = ess.getUserMap();
-//					Set<UUID> uuids = map.getAllUniqueUsers();
-//
-//					int size = uuids.size();
-//					int i = 0;
-//
-//					for (UUID uuid : uuids) {
-//						User user = map.getUser(uuid);
-//
-//						String name = user.getName();
-//						long lastJoin = user.getLastLogin();
-//
-//						PlayerDataManager.updatePlayerData(uuid, name, lastJoin);
-//						i++;
-//
-//						if (player != null) {
-//							JSONMessage.create(ChatColor.GREEN
-//									+ String.format("%.2f", (((double) i / (double) size) * 100d)) + "% done.")
-//									.actionbar(player);
-//						}
-//					}
-//
-//					if (player != null) {
-//						JSONMessage.create("完了！").actionbar(player);
-//						player.sendMessage(ChatColor.GREEN + "完了！");
-//					}
-//				}
-//			}.start();
-//			return;
-//		}
+		//		if (args[0].equalsIgnoreCase("importAll")) {
+		//
+		//			new Thread() {
+		//				private Player player = p;
+		//
+		//				public void run() {
+		//					Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		//
+		//					UserMap map = ess.getUserMap();
+		//					Set<UUID> uuids = map.getAllUniqueUsers();
+		//
+		//					int size = uuids.size();
+		//					int i = 0;
+		//
+		//					for (UUID uuid : uuids) {
+		//						User user = map.getUser(uuid);
+		//
+		//						String name = user.getName();
+		//						long lastJoin = user.getLastLogin();
+		//
+		//						PlayerDataManager.updatePlayerData(uuid, name, lastJoin);
+		//						i++;
+		//
+		//						if (player != null) {
+		//							JSONMessage.create(ChatColor.GREEN
+		//									+ String.format("%.2f", (((double) i / (double) size) * 100d)) + "% done.")
+		//									.actionbar(player);
+		//						}
+		//					}
+		//
+		//					if (player != null) {
+		//						JSONMessage.create("完了！").actionbar(player);
+		//						player.sendMessage(ChatColor.GREEN + "完了！");
+		//					}
+		//				}
+		//			}.start();
+		//			return;
+		//		}
 
 		if (args[0].equalsIgnoreCase("user")) {
 
