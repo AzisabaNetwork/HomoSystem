@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,7 +61,6 @@ public class PlayerDataManager {
 
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		List<PlayerData> playerDataList = new ArrayList<>();
 		String cmd = "select * from " + sql.getTicketTableName() + " where lastjoin > "
 				+ (System.currentTimeMillis() - (1000L/**millis*/
 						* 60L/**seconds*/
@@ -68,6 +68,8 @@ public class PlayerDataManager {
 						* 24L/**hours*/
 						* 30L/**days*/
 				));
+
+		List<UUID> uuidList = new ArrayList<>();
 
 		Statement stm = sql.createStatement();
 
@@ -77,20 +79,91 @@ public class PlayerDataManager {
 
 			while (set.next()) {
 				UUID uuid = UUID.fromString(set.getString("uuid"));
-
-				PlayerData data = new PlayerData(uuid, BigInteger.ZERO);
-				setUpPlayerData(data);
-
-				playerDataList.add(data);
+				uuidList.add(uuid);
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			SQLHandler.closeStatement(stm);
 		}
 
-		return playerDataList;
+		return getPlayerDataListByUUIDList(uuidList);
+	}
+
+	public static List<PlayerData> getPlayerDataListByUUIDList(List<UUID> uuidList) {
+		SQLHandler sql = SQLManager.getProtectedSQL();
+
+		List<String> columnList = SQLManager.getColumnsFromMoneyData();
+
+		List<PlayerData> dataList = new ArrayList<>();
+		StringBuilder basicCmd = new StringBuilder("select * from " + sql.getTicketTableName() + " where uuid = ''");
+		StringBuilder moneyCmd = new StringBuilder("select * from " + sql.getMoneyTableName() + " where uuid = ''");
+
+		for (UUID uuid : uuidList) {
+			basicCmd.append(" OR uuid = '" + uuid.toString() + "'");
+		}
+		basicCmd.append(";");
+
+		for (UUID uuid : uuidList) {
+			moneyCmd.append(" OR uuid = '" + uuid.toString() + "'");
+		}
+		moneyCmd.append(";");
+
+		Statement stm = sql.createStatement();
+		try {
+
+			HashMap<UUID, HashMap<String, BigInteger>> moneyMap = new HashMap<>();
+
+			ResultSet moneySet = stm.executeQuery(moneyCmd.toString());
+
+			while (moneySet.next()) {
+
+				HashMap<String, BigInteger> moneyServerMap = new HashMap<>();
+
+				for (String column : columnList) {
+					String value = moneySet.getString(column);
+					if (value == null)
+						continue;
+
+					moneyServerMap.put(column, new BigInteger(value));
+				}
+
+				moneyMap.put(UUID.fromString(moneySet.getString("uuid")), moneyServerMap);
+			}
+
+			ResultSet set = stm.executeQuery(basicCmd.toString());
+
+			UUID uuid;
+			String name;
+			BigInteger tickets;
+			long lastjoin;
+
+			while (set.next()) {
+				uuid = UUID.fromString(set.getString("uuid"));
+				name = set.getString("name");
+				tickets = new BigInteger(set.getString("tickets"));
+				lastjoin = set.getLong("lastjoin");
+
+				PlayerData data = new PlayerData(uuid, name, tickets, lastjoin);
+
+				if (moneyMap.containsKey(uuid)) {
+					HashMap<String, BigInteger> moneyServerMap = moneyMap.get(uuid);
+
+					for (String key : moneyServerMap.keySet()) {
+						data.setMoney(key, moneyServerMap.get(key));
+					}
+				}
+
+				dataList.add(data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		return dataList;
 	}
 
 	public static boolean setUpPlayerData(PlayerData data) {
