@@ -38,25 +38,6 @@ public class HomoCommand implements CommandExecutor {
 			return;
 		}
 
-		/**
-		 * 臨時コード開始
-		 */
-		if (args[0].equalsIgnoreCase("movelastjoin")) {
-			new Thread() {
-				Player player = p;
-
-				public void run() {
-					int changed = PlayerDataManager.moveAllLastJoin();
-
-					player.sendMessage(ChatColor.RED + "" + changed + "個のデータが移行されました。");
-				}
-			}.start();
-			return;
-		}
-		/**
-		 * 臨時コード終了
-		 */
-
 		if (args[0].equalsIgnoreCase("median")) {
 
 			new Thread() {
