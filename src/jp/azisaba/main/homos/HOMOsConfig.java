@@ -33,9 +33,6 @@ public class HOMOsConfig {
 	@ConfigOptions(path = "SQL.Password")
 	public String sqlPassword = "password";
 
-	@ConfigOptions(path = "RecordPlayerJoin")
-	public boolean recordJoin = false;
-
 	@ConfigOptions(path = "TicketValue.HasEconomy")
 	public boolean hasEconomy = true;
 	@ConfigOptions(path = "TicketValue.UpdateTicketValueSeconds")

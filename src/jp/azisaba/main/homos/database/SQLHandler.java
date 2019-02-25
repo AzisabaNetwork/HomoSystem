@@ -32,6 +32,7 @@ public class SQLHandler {
 	private final String ticketdata_table = "ticketdata";
 	private final String ticketvalue_table = "ticketvalue";
 	private final String moneydata_table = "moneydata";
+	private final String lastjoin_table = "lastjoin";
 
 	protected SQLHandler(Homos plugin, String ip, int port, String database, String user, String password) {
 
@@ -244,6 +245,10 @@ public class SQLHandler {
 
 	public String getMoneyTableName() {
 		return moneydata_table;
+	}
+
+	public String getLastjoinTableName() {
+		return lastjoin_table;
 	}
 
 	public static boolean closeStatement(Statement stm) {

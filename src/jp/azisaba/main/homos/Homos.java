@@ -29,6 +29,12 @@ public class Homos extends JavaPlugin {
 		Homos.config = new HOMOsConfig(this);
 		Homos.config.loadConfig();
 
+		if (config.serverName.equalsIgnoreCase("Unknown")) {
+			getLogger().warning("サーバー名は 'Unknown' 以外である必要があります。Pluginは無効化されます...");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
+
 		if (config.hasEconomy) {
 			if (!setupEconomy()) {
 				getLogger().warning("経済の取得に失敗しました。");
@@ -55,9 +61,13 @@ public class Homos extends JavaPlugin {
 		Bukkit.getLogger().info(getName() + " enabled.");
 
 		List<String> columns = SQLManager.getColumnsFromMoneyData();
-
-		if (!columns.contains(config.serverName) && !config.serverName.equalsIgnoreCase("unknown")) {
+		if (!columns.contains(config.serverName)) {
 			SQLManager.addMoneyDataColmun(config.serverName);
+		}
+
+		columns = SQLManager.getColumnsFromLastjoin();
+		if (!columns.contains(config.serverName)) {
+			SQLManager.addLastjoinColmun(config.serverName);
 		}
 	}
 

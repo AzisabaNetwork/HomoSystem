@@ -12,7 +12,7 @@ public class PlayerData {
 	private String name;
 	private BigInteger tickets;
 	private HashMap<String, BigInteger> moneyMap = new HashMap<>();
-	private long lastJoin;
+	private HashMap<String, Long> lastJoin = new HashMap<>();
 
 	public PlayerData(UUID uuid, BigInteger tickets) {
 		this.uuid = uuid;
@@ -24,11 +24,10 @@ public class PlayerData {
 		this.tickets = tickets;
 	}
 
-	public PlayerData(UUID uuid, String name, BigInteger tickets, long lastjoin) {
+	public PlayerData(UUID uuid, String name, BigInteger tickets) {
 		this.uuid = uuid;
 		this.name = name;
 		this.tickets = tickets;
-		this.lastJoin = lastjoin;
 	}
 
 	public UUID getUuid() {
@@ -55,12 +54,21 @@ public class PlayerData {
 		this.tickets = tickets;
 	}
 
-	public long getLastJoin() {
-		return lastJoin;
+	public long getLastJoin(String server) {
+		if (lastJoin.containsKey(server)) {
+			return lastJoin.get(server);
+		}
+
+		return 0L;
 	}
 
-	public void setLastJoin(long lastJoin) {
-		this.lastJoin = lastJoin;
+	public long getLastJoin() {
+		String serverName = Homos.config.serverName;
+		return getLastJoin(serverName);
+	}
+
+	public void setLastJoin(String server, long value) {
+		this.lastJoin.put(server, value);
 	}
 
 	public BigInteger getMoney(String server) {

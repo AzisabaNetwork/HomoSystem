@@ -57,16 +57,27 @@ public class SQLManager {
 				"  PRIMARY KEY (`uuid`)" +
 				") ENGINE=InnoDB;";
 
+		String createLastjoinData = "CREATE TABLE IF NOT EXISTS `lastjoin` (" +
+				"  `uuid` varchar(36) NOT NULL," +
+				"  PRIMARY KEY (`uuid`)" +
+				") ENGINE=InnoDB;";
+
 		boolean success1 = sql.executeCommand(createTicketData);
 		boolean success2 = sql.executeCommand(createTicketValue);
 		boolean success3 = sql.executeCommand(createMoneyData);
+		boolean success4 = sql.executeCommand(createLastjoinData);
 
-		return success1 && success2 && success3;
+		return success1 && success2 && success3 && success4;
 	}
 
 	public static boolean addMoneyDataColmun(String name) {
-		return sql.executeCommand("ALTER TABLE `homos`.`" + sql.getMoneyTableName() + "` " +
+		return sql.executeCommand("ALTER TABLE `" + sql.getMoneyTableName() + "` " +
 				"ADD COLUMN `" + name + "` BIGINT(20) NULL DEFAULT 0;");
+	}
+
+	public static boolean addLastjoinColmun(String name) {
+		return sql.executeCommand("ALTER TABLE `" + sql.getLastjoinTableName() + "` ADD COLUMN `" + name
+				+ "` BIGINT(20) NULL DEFAULT '0'");
 	}
 
 	public static List<String> getColumnsFromTicketValueData() {
@@ -101,6 +112,36 @@ public class SQLManager {
 		try {
 
 			String cmd = "show columns from " + sql.getMoneyTableName() + ";";
+			ResultSet set = stm.executeQuery(cmd);
+
+			while (set.next()) {
+				String column = set.getString("Field");
+				String type = set.getString("Type");
+
+				if (!type.equals("bigint(20)")) {
+					continue;
+				}
+
+				colmnList.add(column);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		return colmnList;
+	}
+
+	public static List<String> getColumnsFromLastjoin() {
+
+		List<String> colmnList = new ArrayList<>();
+		Statement stm = sql.createStatement();
+
+		try {
+
+			String cmd = "show columns from " + sql.getLastjoinTableName() + ";";
 			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {

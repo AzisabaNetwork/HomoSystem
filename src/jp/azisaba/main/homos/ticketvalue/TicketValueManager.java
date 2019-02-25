@@ -22,10 +22,6 @@ public class TicketValueManager {
 	public boolean updateTicketValue(BigInteger value, boolean fireEvent) {
 
 		String serverName = Homos.config.serverName;
-		if (serverName.equalsIgnoreCase("unknown")) {
-			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
-		}
-
 		if (getCurrentTicketValue().compareTo(value) == 0) {
 			return false;
 		}
@@ -50,9 +46,6 @@ public class TicketValueManager {
 
 	public boolean setBoostMode(boolean enable, boolean fireEvent) {
 		String serverName = Homos.config.serverName;
-		if (serverName.equalsIgnoreCase("unknown")) {
-			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
-		}
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
@@ -70,9 +63,6 @@ public class TicketValueManager {
 
 	public boolean lock(boolean lock) {
 		String serverName = Homos.config.serverName;
-		if (serverName.equalsIgnoreCase("unknown")) {
-			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
-		}
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
@@ -106,9 +96,6 @@ public class TicketValueManager {
 
 	private TicketValueData getTicketValueData() {
 		String serverName = Homos.config.serverName;
-		if (serverName.equalsIgnoreCase("unknown")) {
-			throw new IllegalStateException("Server name mustn't be \"" + serverName + "\"");
-		}
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 
+import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.PlayerData;
 
 public class PlayerDataManager {
@@ -40,9 +42,8 @@ public class PlayerDataManager {
 
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		String cmd = "INSERT INTO " + sql.getTicketTableName() + " (uuid, name, lastjoin) VALUES ('" + uuid.toString()
-				+ "', '" + name + "', " + lastjoin
-				+ ") ON DUPLICATE KEY UPDATE name=VALUES(name), lastjoin=VALUES(lastjoin);";
+		String cmd = "INSERT INTO " + sql.getTicketTableName() + " (uuid, name) VALUES ('" + uuid.toString()
+				+ "', '" + name + "') ON DUPLICATE KEY UPDATE name=VALUES(name);";
 
 		List<String> columns = SQLManager.getColumnsFromMoneyData();
 
@@ -51,17 +52,22 @@ public class PlayerDataManager {
 				+ ") VALUES ('" + uuid.toString() + "'" + StringUtils.repeat(", 0", columns.size())
 				+ ") ON DUPLICATE KEY UPDATE uuid=uuid;";
 
+		String lastJoinCmd = "INSERT INTO " + sql.getLastjoinTableName() + " (uuid, " + Homos.config.serverName
+				+ ") VALUES ('" + uuid.toString() + "', " + lastjoin + ") ON DUPLICATE KEY UPDATE "
+				+ Homos.config.serverName + "=VALUES(" + Homos.config.serverName + ");";
+
 		boolean success = sql.executeCommand(cmd);
 		boolean success2 = sql.executeCommand(moneyCmd);
+		boolean success3 = sql.executeCommand(lastJoinCmd);
 
-		return success && success2;
+		return success && success2 && success3;
 	}
 
 	public static List<PlayerData> getPlayerDataListBefore30Days() {
 
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		String cmd = "select * from " + sql.getTicketTableName() + " where lastjoin > "
+		String cmd = "select uuid from " + sql.getLastjoinTableName() + " where " + Homos.config.serverName + " > "
 				+ (System.currentTimeMillis() - (1000L/**millis*/
 						* 60L/**seconds*/
 						* 60L/**minutes*/
@@ -70,11 +76,9 @@ public class PlayerDataManager {
 				));
 
 		List<UUID> uuidList = new ArrayList<>();
-
 		Statement stm = sql.createStatement();
 
 		try {
-
 			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {
@@ -93,64 +97,46 @@ public class PlayerDataManager {
 	public static List<PlayerData> getPlayerDataListByUUIDList(List<UUID> uuidList) {
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		List<String> columnList = SQLManager.getColumnsFromMoneyData();
-
 		List<PlayerData> dataList = new ArrayList<>();
 		StringBuilder basicCmd = new StringBuilder("select * from " + sql.getTicketTableName() + " where uuid = ''");
-		StringBuilder moneyCmd = new StringBuilder("select * from " + sql.getMoneyTableName() + " where uuid = ''");
 
 		for (UUID uuid : uuidList) {
 			basicCmd.append(" OR uuid = '" + uuid.toString() + "'");
 		}
 		basicCmd.append(";");
 
-		for (UUID uuid : uuidList) {
-			moneyCmd.append(" OR uuid = '" + uuid.toString() + "'");
-		}
-		moneyCmd.append(";");
-
 		Statement stm = sql.createStatement();
 		try {
 
-			HashMap<UUID, HashMap<String, BigInteger>> moneyMap = new HashMap<>();
-
-			ResultSet moneySet = stm.executeQuery(moneyCmd.toString());
-
-			while (moneySet.next()) {
-
-				HashMap<String, BigInteger> moneyServerMap = new HashMap<>();
-
-				for (String column : columnList) {
-					String value = moneySet.getString(column);
-					if (value == null)
-						continue;
-
-					moneyServerMap.put(column, new BigInteger(value));
-				}
-
-				moneyMap.put(UUID.fromString(moneySet.getString("uuid")), moneyServerMap);
-			}
+			HashMap<UUID, HashMap<String, BigInteger>> moneyMap = getMoneyMap(uuidList);
+			HashMap<UUID, HashMap<String, Long>> lastJoinMap = getLastjoinMap(uuidList);
 
 			ResultSet set = stm.executeQuery(basicCmd.toString());
 
 			UUID uuid;
 			String name;
 			BigInteger tickets;
-			long lastjoin;
 
 			while (set.next()) {
 				uuid = UUID.fromString(set.getString("uuid"));
 				name = set.getString("name");
 				tickets = new BigInteger(set.getString("tickets"));
-				lastjoin = set.getLong("lastjoin");
 
-				PlayerData data = new PlayerData(uuid, name, tickets, lastjoin);
+				PlayerData data = new PlayerData(uuid, name, tickets);
 
 				if (moneyMap.containsKey(uuid)) {
 					HashMap<String, BigInteger> moneyServerMap = moneyMap.get(uuid);
 
 					for (String key : moneyServerMap.keySet()) {
 						data.setMoney(key, moneyServerMap.get(key));
+					}
+				}
+
+				if (lastJoinMap.containsKey(uuid)) {
+					HashMap<String, Long> lastJoinServerMap = lastJoinMap.get(uuid);
+
+					for (String key : lastJoinServerMap.keySet()) {
+						data.setLastJoin(key, lastJoinServerMap.get(key));
 					}
 				}
 
@@ -175,7 +161,6 @@ public class PlayerDataManager {
 		UUID uuid = null;
 		String name = null;
 		BigInteger tickets = BigInteger.valueOf(-1);
-		long lastjoin = -1;
 
 		Statement stm = sql.createStatement();
 
@@ -203,11 +188,9 @@ public class PlayerDataManager {
 				if (data.getUuid() != null) {
 					name = playerDataSet.getString("name");
 					tickets = new BigInteger(playerDataSet.getString("tickets"));
-					lastjoin = playerDataSet.getLong("lastjoin");
 				} else if (data.getName() != null) {
 					uuid = UUID.fromString(playerDataSet.getString("uuid"));
 					tickets = new BigInteger(playerDataSet.getString("tickets"));
-					lastjoin = playerDataSet.getLong("lastjoin");
 				}
 			}
 
@@ -250,8 +233,191 @@ public class PlayerDataManager {
 			data.setName(name);
 
 		data.setTickets(tickets);
-		data.setLastJoin(lastjoin);
+
+		HashMap<UUID, HashMap<String, Long>> lastJoinMap = getLastjoinMap(Arrays.asList(data.getUuid()));
+		if (lastJoinMap == null || lastJoinMap.size() <= 0)
+			return true;
+
+		HashMap<String, Long> lastJoinMapServer = lastJoinMap.get(data.getUuid());
+		for (String server : lastJoinMapServer.keySet()) {
+			data.setLastJoin(server, lastJoinMapServer.get(server));
+		}
 
 		return true;
+	}
+
+	private static HashMap<UUID, HashMap<String, BigInteger>> getMoneyMap(List<UUID> uuidList) {
+		SQLHandler sql = SQLManager.getProtectedSQL();
+
+		StringBuilder moneyCmd = new StringBuilder("select * from " + sql.getMoneyTableName() + " where uuid = ''");
+		for (UUID uuid : uuidList) {
+			moneyCmd.append(" OR uuid = '" + uuid.toString() + "'");
+		}
+		moneyCmd.append(";");
+
+		List<String> columnList = SQLManager.getColumnsFromMoneyData();
+
+		Statement stm = sql.createStatement();
+
+		HashMap<UUID, HashMap<String, BigInteger>> moneyMap = new HashMap<>();
+
+		try {
+
+			ResultSet moneySet = stm.executeQuery(moneyCmd.toString());
+
+			while (moneySet.next()) {
+
+				HashMap<String, BigInteger> moneyServerMap = new HashMap<>();
+
+				for (String column : columnList) {
+					String value = moneySet.getString(column);
+					if (value == null)
+						continue;
+
+					moneyServerMap.put(column, new BigInteger(value));
+				}
+
+				moneyMap.put(UUID.fromString(moneySet.getString("uuid")), moneyServerMap);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		return moneyMap;
+	}
+
+	private static HashMap<UUID, HashMap<String, Long>> getLastjoinMap(List<UUID> uuidList) {
+		SQLHandler sql = SQLManager.getProtectedSQL();
+
+		StringBuilder moneyCmd = new StringBuilder("select * from " + sql.getLastjoinTableName() + " where uuid = ''");
+		for (UUID uuid : uuidList) {
+			moneyCmd.append(" OR uuid = '" + uuid.toString() + "'");
+		}
+		moneyCmd.append(";");
+
+		List<String> columnList = SQLManager.getColumnsFromLastjoin();
+
+		Statement stm = sql.createStatement();
+
+		HashMap<UUID, HashMap<String, Long>> moneyMap = new HashMap<>();
+
+		try {
+
+			ResultSet moneySet = stm.executeQuery(moneyCmd.toString());
+
+			while (moneySet.next()) {
+
+				HashMap<String, Long> moneyServerMap = new HashMap<>();
+
+				for (String column : columnList) {
+					long value = moneySet.getLong(column);
+
+					moneyServerMap.put(column, value);
+				}
+
+				moneyMap.put(UUID.fromString(moneySet.getString("uuid")), moneyServerMap);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		return moneyMap;
+	}
+
+	@SuppressWarnings("unused")
+	private static HashMap<UUID, Long> getLastjoinMap(List<UUID> uuidList, String serverName) {
+		SQLHandler sql = SQLManager.getProtectedSQL();
+
+		if (!SQLManager.getColumnsFromLastjoin().contains(serverName)) {
+			throw new IllegalArgumentException(
+					"There is no column called '" + serverName + "' in '" + sql.getLastjoinTableName() + "' table.");
+		}
+
+		StringBuilder moneyCmd = new StringBuilder("select * from " + sql.getLastjoinTableName() + " where uuid = ''");
+		for (UUID uuid : uuidList) {
+			moneyCmd.append(" OR uuid = '" + uuid.toString() + "'");
+		}
+		moneyCmd.append(";");
+
+		Statement stm = sql.createStatement();
+
+		HashMap<UUID, Long> moneyMap = new HashMap<>();
+
+		try {
+
+			ResultSet moneySet = stm.executeQuery(moneyCmd.toString());
+
+			while (moneySet.next()) {
+
+				UUID uuid = UUID.fromString(moneySet.getString("uuid"));
+				long value = moneySet.getLong(serverName);
+
+				moneyMap.put(uuid, value);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		return moneyMap;
+	}
+
+	public static int moveAllLastJoin() {
+		SQLHandler sql = SQLManager.getProtectedSQL();
+		Statement stm = sql.createStatement();
+
+		String cmd1 = "SELECT uuid, lastjoin from " + sql.getTicketTableName();
+
+		HashMap<UUID, Long> lastJoin = new HashMap<>();
+
+		try {
+			ResultSet set = stm.executeQuery(cmd1);
+
+			while (set.next()) {
+				UUID uuid = UUID.fromString(set.getString("uuid"));
+				long lastjoin = set.getLong("lastjoin");
+
+				lastJoin.put(uuid, lastjoin);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		StringBuilder cmd2 = new StringBuilder("INSERT INTO " + sql.getLastjoinTableName() + " (uuid, main) VALUES ");
+		int count = 0;
+		for (UUID uuid : lastJoin.keySet()) {
+
+			count++;
+
+			if (count == 1) {
+				cmd2.append("('" + uuid.toString() + "', " + lastJoin.get(uuid) + ")");
+				continue;
+			}
+			cmd2.append(", ('" + uuid.toString() + "', " + lastJoin.get(uuid) + ")");
+		}
+
+		cmd2.append(" ON DUPLICATE KEY UPDATE uuid=uuid;");
+
+		stm = sql.createStatement();
+
+		try {
+			return stm.executeUpdate(cmd2.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			SQLHandler.closeStatement(stm);
+		}
+
+		return -1;
 	}
 }
