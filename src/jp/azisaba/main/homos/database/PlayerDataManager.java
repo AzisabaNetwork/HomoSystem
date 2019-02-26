@@ -175,12 +175,12 @@ public class PlayerDataManager {
 
 			if (data.getUuid() != null) {
 
-				String cmd = "select name, tickets, lastjoin from " + sql.getTicketTableName() + " where uuid = '"
+				String cmd = "select name, tickets from " + sql.getTicketTableName() + " where uuid = '"
 						+ data.getUuid().toString() + "'";
 				playerDataSet = stm.executeQuery(cmd);
 			} else if (data.getName() != null) {
 
-				String playerDataCmd = "SELECT uuid, tickets, lastjoin from " + sql.getTicketTableName()
+				String playerDataCmd = "SELECT uuid, tickets from " + sql.getTicketTableName()
 						+ " where name='"
 						+ data.getName() + "' LIMIT 0, 1";
 				playerDataSet = stm.executeQuery(playerDataCmd);

@@ -1,6 +1,6 @@
 name: Homos
 main: jp.azisaba.main.homos.Homos
-version: 1.1.4-beta
+version: 1.1.5-beta
 author: siloneco
 description: "Hyper Original Money Operator System."
 softdepend: ["Vault"]
