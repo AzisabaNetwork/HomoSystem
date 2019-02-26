@@ -20,8 +20,8 @@ public class Homos extends JavaPlugin {
 
 	public static HOMOsConfig config;
 	private static TicketValueManager ticketValueManager;
+	private static Economy econ = null;
 	private BukkitTask task;
-	private static Economy econ;
 
 	@Override
 	public void onEnable() {
@@ -29,7 +29,7 @@ public class Homos extends JavaPlugin {
 		Homos.config = new HOMOsConfig(this);
 		Homos.config.loadConfig();
 
-		if (config.serverName.equalsIgnoreCase("Unknown")) {
+		if (config.serverName.equalsIgnoreCase("Unknown") && !config.readOnly) {
 			getLogger().warning("サーバー名は 'Unknown' 以外である必要があります。Pluginは無効化されます...");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
@@ -53,22 +53,27 @@ public class Homos extends JavaPlugin {
 		Bukkit.getPluginCommand("homo")
 				.setPermissionMessage(ChatColor.GREEN + "おっと！ " + ChatColor.RED + "あなたには権限がありません！");
 
-		if (config.hasEconomy) {
+		if (config.hasEconomy && !config.readOnly) {
 			this.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
 					(long) (20 * config.updateTicketValueSeconds));
 		}
 
+		if (!config.readOnly) {
+			List<String> columns = SQLManager.getColumnsFromMoneyData();
+			if (!columns.contains(config.serverName)) {
+				SQLManager.addMoneyDataColmun(config.serverName);
+			}
+
+			columns = SQLManager.getColumnsFromLastjoin();
+			if (!columns.contains(config.serverName)) {
+				SQLManager.addLastjoinColmun(config.serverName);
+			}
+		}
+
+		if (config.readOnly) {
+			getLogger().info("*** HOMOS IS NOW READ ONLY MODE ***");
+		}
 		Bukkit.getLogger().info(getName() + " enabled.");
-
-		List<String> columns = SQLManager.getColumnsFromMoneyData();
-		if (!columns.contains(config.serverName)) {
-			SQLManager.addMoneyDataColmun(config.serverName);
-		}
-
-		columns = SQLManager.getColumnsFromLastjoin();
-		if (!columns.contains(config.serverName)) {
-			SQLManager.addLastjoinColmun(config.serverName);
-		}
 	}
 
 	public static TicketValueManager getTicketValueManager() {

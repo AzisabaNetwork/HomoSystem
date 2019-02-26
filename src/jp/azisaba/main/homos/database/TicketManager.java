@@ -9,12 +9,19 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import jp.azisaba.main.homos.Homos;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.classes.TicketValueData;
 
 public class TicketManager {
 
 	public static boolean addTicket(UUID uuid, BigInteger value) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		String addTicket = "INSERT INTO ticketdata (uuid, tickets) VALUES ('" + uuid.toString()
@@ -27,6 +34,12 @@ public class TicketManager {
 	}
 
 	public static boolean removeTicket(UUID uuid, BigInteger value) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		if (sql.getTickets(uuid).subtract(value).compareTo(BigInteger.ZERO) < 0) {
@@ -94,6 +107,12 @@ public class TicketManager {
 	}
 
 	private static boolean addMoney(UUID uuid, BigInteger value) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		List<String> colmnList = SQLManager.getColumnsFromTicketValueData();
@@ -119,6 +138,12 @@ public class TicketManager {
 	}
 
 	private static boolean removeMoney(UUID uuid, BigInteger value) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
 		List<String> colmnList = SQLManager.getColumnsFromTicketValueData();
@@ -154,10 +179,22 @@ public class TicketManager {
 	}
 
 	public static boolean addTicket(Player p, BigInteger value) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		return addTicket(p.getUniqueId(), value);
 	}
 
 	public static boolean removeTicket(Player p, BigInteger value) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		return removeTicket(p.getUniqueId(), value);
 	}
 

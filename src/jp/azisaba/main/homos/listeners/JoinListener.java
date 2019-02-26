@@ -18,6 +18,11 @@ public class JoinListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
+
+		if (Homos.config.readOnly) {
+			return;
+		}
+
 		Player p = e.getPlayer();
 		boolean success = PlayerDataManager.updatePlayerData(p.getUniqueId(), p.getName(), System.currentTimeMillis());
 

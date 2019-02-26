@@ -71,11 +71,23 @@ public class SQLManager {
 	}
 
 	public static boolean addMoneyDataColmun(String name) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		return sql.executeCommand("ALTER TABLE `" + sql.getMoneyTableName() + "` " +
 				"ADD COLUMN `" + name + "` BIGINT(20) NULL DEFAULT 0;");
 	}
 
 	public static boolean addLastjoinColmun(String name) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		return sql.executeCommand("ALTER TABLE `" + sql.getLastjoinTableName() + "` ADD COLUMN `" + name
 				+ "` BIGINT(20) NULL DEFAULT '0'");
 	}

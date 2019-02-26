@@ -155,11 +155,23 @@ public class SQLHandler {
 	}
 
 	public boolean addMoneyDataColmun(String name) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		return executeCommand("ALTER TABLE `homos`.`" + getMoneyTableName() + "` " +
 				"ADD COLUMN `" + name + "` BIGINT(20) NULL DEFAULT 0;");
 	}
 
 	public boolean removeMoneyDataColmun(String name) {
+
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		return executeCommand("ALTER TABLE `homos`.`" + getMoneyTableName() + "` DROP COLUMN `" + name + "`;");
 	}
 

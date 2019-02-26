@@ -21,6 +21,8 @@ public class HOMOsConfig {
 
 	@ConfigOptions(path = "ServerName")
 	public String serverName = "Unknown";
+	@ConfigOptions(path = "ReadOnly")
+	public boolean readOnly = false;
 
 	@ConfigOptions(path = "SQL.IP")
 	public String sqlIp = "localhost";

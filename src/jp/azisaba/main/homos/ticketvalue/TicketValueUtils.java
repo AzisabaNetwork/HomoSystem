@@ -20,6 +20,11 @@ public class TicketValueUtils {
 
 	protected static void update() {
 
+		if (Homos.config.readOnly) {
+			throw new IllegalStateException(
+					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+		}
+
 		if (Homos.getTicketValueManager().isLocked()) {
 			return;
 		}
