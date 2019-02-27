@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.azisaba</groupId>
-	<artifactId>Homos</artifactId>
+	<artifactId>HomoSystem</artifactId>
 	<version>1.1.5-beta</version>
 
 	<name>${project.artifactId}</name>
