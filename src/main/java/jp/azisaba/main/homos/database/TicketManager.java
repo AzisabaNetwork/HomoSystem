@@ -45,18 +45,20 @@ public class TicketManager {
 		int compare = sql.getTickets(uuid).subtract(value).compareTo(BigInteger.ZERO);
 		if (compare < 0) {
 			throw new IllegalArgumentException("Value must be greater than the player has.");
+		} else if (compare == 0) {
+			value = sql.getTickets(uuid);
 		}
 
 		String removeTicket = "INSERT INTO " + sql.getTicketTableName() + " (uuid, tickets) VALUES ('" + uuid.toString()
 				+ "', " + value.toString() + ") ON DUPLICATE KEY UPDATE tickets=tickets-VALUES(tickets);";
 
-		boolean success2 = removeMoney(uuid, value, compare == 0);
+		boolean success2 = removeMoney(uuid, value);
 		boolean success1 = sql.executeCommand(removeTicket);
 
 		return success1 && success2;
 	}
 
-	public static BigDecimal valueOfTickets(UUID uuid, String server, BigInteger value) {
+	public static BigInteger valueOfTickets(UUID uuid, String server, BigInteger value) {
 		PlayerData data = PlayerDataManager.getPlayerData(uuid);
 
 		BigInteger money = data.getMoney(server);
@@ -67,42 +69,42 @@ public class TicketManager {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
 			}
 
-			return BigDecimal.valueOf(-1);
+			return BigInteger.valueOf(-1);
 		}
 
 		BigDecimal ticketValue = new BigDecimal(money)
 				.divide(new BigDecimal(data.getTickets()), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(value));
 
-		return ticketValue;
+		return ticketValue.toBigInteger();
 	}
 
-	public static BigDecimal valueOfTicketsToConvertMoney(UUID uuid, String server, BigInteger amount) {
+	public static BigInteger valueOfTicketsToConvertMoney(UUID uuid, String server, BigInteger amount) {
 		PlayerData data = PlayerDataManager.getPlayerData(uuid);
 
-		BigDecimal money;
+		BigInteger money;
 		if (server != null) {
-			money = new BigDecimal(data.getMoney(server));
+			money = data.getMoney(server);
 		} else {
-			money = new BigDecimal(data.getMoney());
+			money = data.getMoney();
 		}
 
-		if (money.compareTo(BigDecimal.ZERO) < 0) {
+		if (money.compareTo(BigInteger.ZERO) < 0) {
 
 			if (!SQLManager.getColumnsFromTicketValueData().contains(server)) {
 				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
 			}
 
-			return BigDecimal.valueOf(-1);
+			return BigInteger.valueOf(-1);
 		}
 
-		BigDecimal tickets = new BigDecimal(data.getTickets());
+		BigInteger tickets = data.getTickets();
 
-		if (tickets.compareTo(BigDecimal.ZERO) <= 0) {
-			return BigDecimal.ZERO;
+		if (tickets.compareTo(BigInteger.ZERO) <= 0) {
+			return BigInteger.ZERO;
 		}
 
-		BigDecimal value = money.divide(tickets, 2, BigDecimal.ROUND_HALF_UP);
-		value = value.multiply(new BigDecimal(amount)).multiply(BigDecimal.valueOf(0.9));
+		BigInteger value = money.divide(tickets);
+		value = (new BigDecimal(value.multiply(amount)).multiply(BigDecimal.valueOf(0.9))).toBigInteger();
 
 		return value;
 	}
@@ -138,7 +140,7 @@ public class TicketManager {
 		return success;
 	}
 
-	private static boolean removeMoney(UUID uuid, BigInteger value, boolean reset) {
+	private static boolean removeMoney(UUID uuid, BigInteger value) {
 
 		if (Homos.config.readOnly) {
 			throw new IllegalStateException(
@@ -153,13 +155,13 @@ public class TicketManager {
 		HashMap<String, String> valueMap = new HashMap<>();
 		for (TicketValueData med : values) {
 
-			BigDecimal valueOfTickets = valueOfTickets(uuid, med.getServerName(), value);
+			BigInteger valueOfTickets = valueOfTickets(uuid, med.getServerName(), value);
 
-			if (valueOfTickets.compareTo(BigDecimal.ZERO) < 0) {
+			if (valueOfTickets.compareTo(BigInteger.ZERO) < 0) {
 				continue;
 			}
 
-			valueMap.put(med.getServerName(), valueOfTickets.setScale(0, BigDecimal.ROUND_UP).toString());
+			valueMap.put(med.getServerName(), valueOfTickets.toString());
 		}
 
 		String uuidStr = "'" + uuid.toString() + "'";
@@ -199,7 +201,7 @@ public class TicketManager {
 		return removeTicket(p.getUniqueId(), value);
 	}
 
-	public static BigDecimal valueOfTickets(Player p, String server, BigInteger amount) {
+	public static BigInteger valueOfTickets(Player p, String server, BigInteger amount) {
 		return valueOfTickets(p.getUniqueId(), server, amount);
 	}
 }
