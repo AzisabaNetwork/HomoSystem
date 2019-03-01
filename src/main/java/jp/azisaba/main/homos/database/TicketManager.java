@@ -42,14 +42,15 @@ public class TicketManager {
 
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		if (sql.getTickets(uuid).subtract(value).compareTo(BigInteger.ZERO) < 0) {
+		int compare = sql.getTickets(uuid).subtract(value).compareTo(BigInteger.ZERO);
+		if (compare < 0) {
 			throw new IllegalArgumentException("Value must be greater than the player has.");
 		}
 
 		String removeTicket = "INSERT INTO " + sql.getTicketTableName() + " (uuid, tickets) VALUES ('" + uuid.toString()
 				+ "', " + value.toString() + ") ON DUPLICATE KEY UPDATE tickets=tickets-VALUES(tickets);";
 
-		boolean success2 = removeMoney(uuid, value);
+		boolean success2 = removeMoney(uuid, value, compare == 0);
 		boolean success1 = sql.executeCommand(removeTicket);
 
 		return success1 && success2;
@@ -120,7 +121,7 @@ public class TicketManager {
 
 		List<String> addValueList = new ArrayList<>();
 		for (TicketValueData med : values) {
-			addValueList.add("" + med.getTicketValue().multiply(value).toString());
+			addValueList.add(med.getTicketValue().multiply(value).toString());
 		}
 
 		String uuidStr = "'" + uuid.toString() + "'";
@@ -137,7 +138,7 @@ public class TicketManager {
 		return success;
 	}
 
-	private static boolean removeMoney(UUID uuid, BigInteger value) {
+	private static boolean removeMoney(UUID uuid, BigInteger value, boolean reset) {
 
 		if (Homos.config.readOnly) {
 			throw new IllegalStateException(
@@ -158,7 +159,7 @@ public class TicketManager {
 				continue;
 			}
 
-			valueMap.put(med.getServerName(), valueOfTickets.setScale(0, BigDecimal.ROUND_DOWN).toString());
+			valueMap.put(med.getServerName(), valueOfTickets.setScale(0, BigDecimal.ROUND_UP).toString());
 		}
 
 		String uuidStr = "'" + uuid.toString() + "'";
