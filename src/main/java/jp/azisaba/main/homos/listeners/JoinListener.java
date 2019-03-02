@@ -24,12 +24,20 @@ public class JoinListener implements Listener {
 		}
 
 		Player p = e.getPlayer();
-		boolean success = PlayerDataManager.updatePlayerData(p.getUniqueId(), p.getName(), System.currentTimeMillis());
 
-		if (!success) {
-			plugin.getLogger().warning("プレイヤーデータの更新に失敗しました");
-		} else {
-			plugin.getLogger().info("updated.");
-		}
+		new Thread() {
+			public void run() {
+				long start = System.currentTimeMillis();
+
+				boolean success = PlayerDataManager.updatePlayerData(p.getUniqueId(), p.getName(),
+						System.currentTimeMillis());
+				if (!success) {
+					plugin.getLogger().warning("プレイヤーデータの更新に失敗しました");
+				} else {
+					long end = System.currentTimeMillis();
+					plugin.getLogger().info(p.getName() + "のプレイヤーデータを更新しました。 (" + (end - start) + "ms)");
+				}
+			}
+		}.start();
 	}
 }
