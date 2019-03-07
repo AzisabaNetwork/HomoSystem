@@ -89,6 +89,9 @@ public class Homos extends JavaPlugin {
 	}
 
 	public static void reloadPlugin() {
+
+		instance.reloadConfig();
+
 		Homos.config = new HOMOsConfig(instance);
 		Homos.config.loadConfig();
 
@@ -102,6 +105,10 @@ public class Homos extends JavaPlugin {
 
 		if (config.hasEconomy && !config.useTicketOnly) {
 			Homos.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(instance, 0, 60 * 20);
+		}
+
+		if (config.useTicketOnly) {
+			instance.getLogger().info("*** HOMOS IS NOW USE TICKET ONLY MODE ***");
 		}
 	}
 
