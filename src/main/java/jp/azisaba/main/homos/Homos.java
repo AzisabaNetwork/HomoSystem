@@ -100,7 +100,7 @@ public class Homos extends JavaPlugin {
 			Homos.task = null;
 		}
 
-		if (config.hasEconomy) {
+		if (config.hasEconomy && !config.useTicketOnly) {
 			Homos.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(instance, 0, 60 * 20);
 		}
 	}
