@@ -298,6 +298,8 @@ public class HomoCommand implements CommandExecutor {
 		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " user [user]" + ChatColor.GRAY
 				+ " - ユーザーデータの表示")
 				.suggestCommand("/" + label + " user ").newline();
+		msg.then(ChatColor.YELLOW + " » " + ChatColor.RED + "/" + label + " reload" + ChatColor.GRAY
+				+ " - Configのreload").suggestCommand("/" + label + " reload").newline();
 		msg.then(ChatColor.LIGHT_PURPLE + StringUtils.repeat("-", 37));
 		return msg;
 	}
