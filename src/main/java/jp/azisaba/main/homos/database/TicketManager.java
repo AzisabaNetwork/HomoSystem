@@ -17,7 +17,7 @@ public class TicketManager {
 
 	public static boolean addTicket(UUID uuid, BigInteger value) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -106,7 +106,7 @@ public class TicketManager {
 
 	private static boolean addMoney(UUID uuid, BigInteger value) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -173,7 +173,7 @@ public class TicketManager {
 
 	public static boolean addTicket(Player p, BigInteger value) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}

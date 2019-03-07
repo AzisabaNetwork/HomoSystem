@@ -18,11 +18,11 @@ public class SQLManager {
 
 		SQLManager.plugin = plugin;
 
-		String ip = Homos.config.sqlIp;
-		int port = Homos.config.sqlPort;
-		String schema = Homos.config.sqlSchema;
-		String user = Homos.config.sqlUser;
-		String password = Homos.config.sqlPassword;
+		String ip = Homos.getPluginConfig().sqlIp;
+		int port = Homos.getPluginConfig().sqlPort;
+		String schema = Homos.getPluginConfig().sqlSchema;
+		String user = Homos.getPluginConfig().sqlUser;
+		String password = Homos.getPluginConfig().sqlPassword;
 
 		sql = new SQLHandler(plugin, ip, port, schema, user, password);
 
@@ -72,7 +72,7 @@ public class SQLManager {
 
 	public static boolean addMoneyDataColmun(String name) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -83,7 +83,7 @@ public class SQLManager {
 
 	public static boolean addLastjoinColmun(String name) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}

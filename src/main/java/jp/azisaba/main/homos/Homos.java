@@ -18,10 +18,11 @@ import net.milkbowl.vault.economy.Economy;
 
 public class Homos extends JavaPlugin {
 
-	public static HOMOsConfig config;
+	private static HOMOsConfig config;
 	private static TicketValueManager ticketValueManager;
 	private static Economy econ = null;
-	private BukkitTask task;
+	private static BukkitTask task;
+	private static Homos instance;
 
 	@Override
 	public void onEnable() {
@@ -54,7 +55,7 @@ public class Homos extends JavaPlugin {
 				.setPermissionMessage(ChatColor.GREEN + "おっと！ " + ChatColor.RED + "あなたには権限がありません！");
 
 		if (config.hasEconomy && !config.useTicketOnly) {
-			this.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
+			Homos.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
 					(long) (20 * config.updateTicketValueSeconds));
 		}
 
@@ -73,6 +74,8 @@ public class Homos extends JavaPlugin {
 		if (config.useTicketOnly) {
 			getLogger().info("*** HOMOS IS NOW USE TICKET ONLY MODE ***");
 		}
+		instance = this;
+
 		Bukkit.getLogger().info(getName() + " enabled.");
 	}
 
@@ -85,21 +88,25 @@ public class Homos extends JavaPlugin {
 		Bukkit.getLogger().info(getName() + " disabled.");
 	}
 
-	public void reloadPlugin() {
-		Homos.config = new HOMOsConfig(this);
+	public static void reloadPlugin() {
+		Homos.config = new HOMOsConfig(instance);
 		Homos.config.loadConfig();
 
 		SQLManager.closeAll();
-		SQLManager.init(this);
+		SQLManager.init(instance);
 
-		if (this.task != null) {
-			this.task.cancel();
-			this.task = null;
+		if (Homos.task != null) {
+			Homos.task.cancel();
+			Homos.task = null;
 		}
 
 		if (config.hasEconomy) {
-			this.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 0, 60 * 20);
+			Homos.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(instance, 0, 60 * 20);
 		}
+	}
+
+	public static HOMOsConfig getPluginConfig() {
+		return Homos.config;
 	}
 
 	public static Economy getEconomy() {

@@ -63,7 +63,7 @@ public class PlayerData {
 	}
 
 	public long getLastJoin() {
-		String serverName = Homos.config.serverName;
+		String serverName = Homos.getPluginConfig().serverName;
 		return getLastJoin(serverName);
 	}
 
@@ -75,8 +75,8 @@ public class PlayerData {
 
 		if (server == null) {
 
-			if (Homos.config.serverName != null) {
-				return getMoney(Homos.config.serverName);
+			if (Homos.getPluginConfig().serverName != null) {
+				return getMoney(Homos.getPluginConfig().serverName);
 			}
 
 			return BigInteger.valueOf(-1);
@@ -90,7 +90,7 @@ public class PlayerData {
 	}
 
 	public BigInteger getMoney() {
-		String serverName = Homos.config.serverName;
+		String serverName = Homos.getPluginConfig().serverName;
 		return getMoney(serverName);
 	}
 

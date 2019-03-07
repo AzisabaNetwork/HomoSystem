@@ -156,7 +156,7 @@ public class SQLHandler {
 
 	public boolean addMoneyDataColmun(String name) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -167,7 +167,7 @@ public class SQLHandler {
 
 	public boolean removeMoneyDataColmun(String name) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}

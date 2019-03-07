@@ -21,12 +21,12 @@ public class TicketValueManager {
 
 	public boolean updateTicketValue(BigInteger value, boolean fireEvent) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		String serverName = Homos.config.serverName;
+		String serverName = Homos.getPluginConfig().serverName;
 		if (getCurrentTicketValue().compareTo(value) == 0) {
 			return false;
 		}
@@ -51,12 +51,12 @@ public class TicketValueManager {
 
 	public boolean setBoostMode(boolean enable, boolean fireEvent) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		String serverName = Homos.config.serverName;
+		String serverName = Homos.getPluginConfig().serverName;
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
@@ -74,12 +74,12 @@ public class TicketValueManager {
 
 	public boolean lock(boolean lock) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		String serverName = Homos.config.serverName;
+		String serverName = Homos.getPluginConfig().serverName;
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
@@ -112,7 +112,7 @@ public class TicketValueManager {
 	}
 
 	private TicketValueData getTicketValueData() {
-		String serverName = Homos.config.serverName;
+		String serverName = Homos.getPluginConfig().serverName;
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();

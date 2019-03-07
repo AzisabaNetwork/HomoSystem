@@ -40,7 +40,7 @@ public class PlayerDataManager {
 
 	public static boolean updatePlayerData(UUID uuid, String name, long lastjoin) {
 
-		if (Homos.config.useTicketOnly) {
+		if (Homos.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -57,9 +57,10 @@ public class PlayerDataManager {
 				+ ") VALUES ('" + uuid.toString() + "'" + StringUtils.repeat(", 0", columns.size())
 				+ ") ON DUPLICATE KEY UPDATE uuid=uuid;";
 
-		String lastJoinCmd = "INSERT INTO " + sql.getLastjoinTableName() + " (uuid, " + Homos.config.serverName
+		String lastJoinCmd = "INSERT INTO " + sql.getLastjoinTableName() + " (uuid, "
+				+ Homos.getPluginConfig().serverName
 				+ ") VALUES ('" + uuid.toString() + "', " + lastjoin + ") ON DUPLICATE KEY UPDATE "
-				+ Homos.config.serverName + "=VALUES(" + Homos.config.serverName + ");";
+				+ Homos.getPluginConfig().serverName + "=VALUES(" + Homos.getPluginConfig().serverName + ");";
 
 		boolean success = sql.executeCommand(cmd);
 		boolean success2 = sql.executeCommand(moneyCmd);
@@ -72,7 +73,7 @@ public class PlayerDataManager {
 
 		SQLHandler sql = SQLManager.getProtectedSQL();
 
-		String cmd = "select uuid from " + sql.getLastjoinTableName() + " where " + Homos.config.serverName + " > "
+		String cmd = "select uuid from " + sql.getLastjoinTableName() + " where " + Homos.getPluginConfig().serverName + " > "
 				+ (System.currentTimeMillis() - (1000L/**millis*/
 						* 60L/**seconds*/
 						* 60L/**minutes*/

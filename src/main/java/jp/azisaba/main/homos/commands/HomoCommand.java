@@ -38,6 +38,12 @@ public class HomoCommand implements CommandExecutor {
 			return;
 		}
 
+		if (args[0].equalsIgnoreCase("reload")) {
+			Homos.reloadPlugin();
+			p.sendMessage(ChatColor.GREEN + "リロードしました。");
+			return;
+		}
+
 		if (args[0].equalsIgnoreCase("median")) {
 
 			new Thread() {
