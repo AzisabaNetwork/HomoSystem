@@ -29,7 +29,7 @@ public class Homos extends JavaPlugin {
 		Homos.config = new HOMOsConfig(this);
 		Homos.config.loadConfig();
 
-		if (config.serverName.equalsIgnoreCase("Unknown") && !config.readOnly) {
+		if (config.serverName.equalsIgnoreCase("Unknown") && !config.useTicketOnly) {
 			getLogger().warning("サーバー名は 'Unknown' 以外である必要があります。Pluginは無効化されます...");
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
@@ -53,12 +53,12 @@ public class Homos extends JavaPlugin {
 		Bukkit.getPluginCommand("homo")
 				.setPermissionMessage(ChatColor.GREEN + "おっと！ " + ChatColor.RED + "あなたには権限がありません！");
 
-		if (config.hasEconomy && !config.readOnly) {
+		if (config.hasEconomy && !config.useTicketOnly) {
 			this.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
 					(long) (20 * config.updateTicketValueSeconds));
 		}
 
-		if (!config.readOnly) {
+		if (!config.useTicketOnly) {
 			List<String> columns = SQLManager.getColumnsFromMoneyData();
 			if (!columns.contains(config.serverName)) {
 				SQLManager.addMoneyDataColmun(config.serverName);
@@ -70,8 +70,8 @@ public class Homos extends JavaPlugin {
 			}
 		}
 
-		if (config.readOnly) {
-			getLogger().info("*** HOMOS IS NOW READ ONLY MODE ***");
+		if (config.useTicketOnly) {
+			getLogger().info("*** HOMOS IS NOW USE TICKET ONLY MODE ***");
 		}
 		Bukkit.getLogger().info(getName() + " enabled.");
 	}

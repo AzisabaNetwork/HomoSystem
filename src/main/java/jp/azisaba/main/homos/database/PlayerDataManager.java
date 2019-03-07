@@ -40,9 +40,9 @@ public class PlayerDataManager {
 
 	public static boolean updatePlayerData(UUID uuid, String name, long lastjoin) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			throw new IllegalStateException(
-					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
 		SQLHandler sql = SQLManager.getProtectedSQL();

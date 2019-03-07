@@ -21,9 +21,9 @@ public class TicketValueManager {
 
 	public boolean updateTicketValue(BigInteger value, boolean fireEvent) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			throw new IllegalStateException(
-					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
 		String serverName = Homos.config.serverName;
@@ -51,7 +51,7 @@ public class TicketValueManager {
 
 	public boolean setBoostMode(boolean enable, boolean fireEvent) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -74,7 +74,7 @@ public class TicketValueManager {
 
 	public boolean lock(boolean lock) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
 		}

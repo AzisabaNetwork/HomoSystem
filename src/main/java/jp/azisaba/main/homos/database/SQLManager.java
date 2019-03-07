@@ -72,9 +72,9 @@ public class SQLManager {
 
 	public static boolean addMoneyDataColmun(String name) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			throw new IllegalStateException(
-					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
 		return sql.executeCommand("ALTER TABLE `" + sql.getMoneyTableName() + "` " +
@@ -83,9 +83,9 @@ public class SQLManager {
 
 	public static boolean addLastjoinColmun(String name) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			throw new IllegalStateException(
-					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
+					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
 		return sql.executeCommand("ALTER TABLE `" + sql.getLastjoinTableName() + "` ADD COLUMN `" + name

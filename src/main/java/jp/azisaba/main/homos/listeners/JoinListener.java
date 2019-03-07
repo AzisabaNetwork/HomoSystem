@@ -19,7 +19,7 @@ public class JoinListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 
-		if (Homos.config.readOnly) {
+		if (Homos.config.useTicketOnly) {
 			return;
 		}
 
