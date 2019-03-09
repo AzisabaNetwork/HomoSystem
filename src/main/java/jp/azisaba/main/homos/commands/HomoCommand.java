@@ -11,11 +11,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import jp.azisaba.main.homos.Homos;
-import jp.azisaba.main.homos.JSONMessage;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.PlayerDataManager;
 import jp.azisaba.main.homos.database.TicketManager;
 import jp.azisaba.main.homos.ticketvalue.TicketValueUtils;
+import me.rayzr522.jsonmessage.JSONMessage;
 import net.md_5.bungee.api.ChatColor;
 
 public class HomoCommand implements CommandExecutor {
