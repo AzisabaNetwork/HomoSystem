@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.UUID;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 
 public class PlayerData {
 
@@ -63,7 +63,7 @@ public class PlayerData {
 	}
 
 	public long getLastJoin() {
-		String serverName = Homos.getPluginConfig().serverName;
+		String serverName = HomoSystem.getPluginConfig().serverName;
 		return getLastJoin(serverName);
 	}
 
@@ -75,8 +75,8 @@ public class PlayerData {
 
 		if (server == null) {
 
-			if (Homos.getPluginConfig().serverName != null) {
-				return getMoney(Homos.getPluginConfig().serverName);
+			if (HomoSystem.getPluginConfig().serverName != null) {
+				return getMoney(HomoSystem.getPluginConfig().serverName);
 			}
 
 			return BigInteger.valueOf(-1);
@@ -90,7 +90,7 @@ public class PlayerData {
 	}
 
 	public BigInteger getMoney() {
-		String serverName = Homos.getPluginConfig().serverName;
+		String serverName = HomoSystem.getPluginConfig().serverName;
 		return getMoney(serverName);
 	}
 

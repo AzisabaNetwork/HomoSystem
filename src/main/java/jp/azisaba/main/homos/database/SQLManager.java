@@ -5,24 +5,24 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 
 public class SQLManager {
 
 	@SuppressWarnings("unused")
-	private static Homos plugin;
+	private static HomoSystem plugin;
 
 	private static SQLHandler sql = null;
 
-	public static void init(Homos plugin) {
+	public static void init(HomoSystem plugin) {
 
 		SQLManager.plugin = plugin;
 
-		String ip = Homos.getPluginConfig().sqlIp;
-		int port = Homos.getPluginConfig().sqlPort;
-		String schema = Homos.getPluginConfig().sqlSchema;
-		String user = Homos.getPluginConfig().sqlUser;
-		String password = Homos.getPluginConfig().sqlPassword;
+		String ip = HomoSystem.getPluginConfig().sqlIp;
+		int port = HomoSystem.getPluginConfig().sqlPort;
+		String schema = HomoSystem.getPluginConfig().sqlSchema;
+		String user = HomoSystem.getPluginConfig().sqlUser;
+		String password = HomoSystem.getPluginConfig().sqlPassword;
 
 		sql = new SQLHandler(plugin, ip, port, schema, user, password);
 
@@ -72,7 +72,7 @@ public class SQLManager {
 
 	public static boolean addMoneyDataColmun(String name) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -83,7 +83,7 @@ public class SQLManager {
 
 	public static boolean addLastjoinColmun(String name) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}

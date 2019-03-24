@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import org.bukkit.Bukkit;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 import jp.azisaba.main.homos.classes.TicketValueData;
 import jp.azisaba.main.homos.database.SQLHandler;
 import jp.azisaba.main.homos.database.SQLManager;
@@ -13,20 +13,20 @@ import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 public class TicketValueManager {
 
 	@SuppressWarnings("unused")
-	private Homos plugin;
+	private HomoSystem plugin;
 
-	public TicketValueManager(Homos plugin) {
+	public TicketValueManager(HomoSystem plugin) {
 		this.plugin = plugin;
 	}
 
 	public boolean updateTicketValue(BigInteger value, boolean fireEvent) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		String serverName = Homos.getPluginConfig().serverName;
+		String serverName = HomoSystem.getPluginConfig().serverName;
 		if (getCurrentTicketValue().compareTo(value) == 0) {
 			return false;
 		}
@@ -51,12 +51,12 @@ public class TicketValueManager {
 
 	public boolean setBoostMode(boolean enable, boolean fireEvent) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		String serverName = Homos.getPluginConfig().serverName;
+		String serverName = HomoSystem.getPluginConfig().serverName;
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
@@ -74,12 +74,12 @@ public class TicketValueManager {
 
 	public boolean lock(boolean lock) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now READ ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		String serverName = Homos.getPluginConfig().serverName;
+		String serverName = HomoSystem.getPluginConfig().serverName;
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();
@@ -112,7 +112,7 @@ public class TicketValueManager {
 	}
 
 	private TicketValueData getTicketValueData() {
-		String serverName = Homos.getPluginConfig().serverName;
+		String serverName = HomoSystem.getPluginConfig().serverName;
 
 		@SuppressWarnings("deprecation")
 		SQLHandler sql = SQLManager.getSQL();

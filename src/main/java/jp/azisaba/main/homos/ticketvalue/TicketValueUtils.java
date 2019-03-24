@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 import jp.azisaba.main.homos.classes.PlayerData;
 import jp.azisaba.main.homos.database.PlayerDataManager;
 import net.md_5.bungee.api.ChatColor;
@@ -20,18 +20,18 @@ public class TicketValueUtils {
 
 	protected static void update() {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
 
-		if (Homos.getTicketValueManager().isLocked()) {
+		if (HomoSystem.getTicketValueManager().isLocked()) {
 			return;
 		}
 
 		boolean boost = false;
 		BigDecimal median = BigDecimal.valueOf(-1);
-		Economy econ = Homos.getEconomy();
+		Economy econ = HomoSystem.getEconomy();
 
 		if (econ == null) {
 			return;
@@ -87,25 +87,25 @@ public class TicketValueUtils {
 
 		BigDecimal ticketValue = median.divide(BigDecimal.valueOf(1000));
 
-		if (new BigDecimal(Homos.getTicketValueManager().getCurrentTicketValue())
+		if (new BigDecimal(HomoSystem.getTicketValueManager().getCurrentTicketValue())
 				.compareTo(ticketValue) == 0) {
 			return;
 		}
 
-		if (Homos.getTicketValueManager().isBoostMode()) {
+		if (HomoSystem.getTicketValueManager().isBoostMode()) {
 			boost = ticketValue.compareTo(BigDecimal.valueOf(5000)) < 0;
 		}
 
-		Homos.getTicketValueManager().updateTicketValue(ticketValue.setScale(0, BigDecimal.ROUND_DOWN).toBigInteger(),
+		HomoSystem.getTicketValueManager().updateTicketValue(ticketValue.setScale(0, BigDecimal.ROUND_DOWN).toBigInteger(),
 				true);
-		Homos.getTicketValueManager().setBoostMode(boost, true);
+		HomoSystem.getTicketValueManager().setBoostMode(boost, true);
 
 	}
 
 	public static Entry<String, BigDecimal> getMedianPlayer() {
 		String player = ChatColor.GRAY + "System";
 		BigDecimal median = BigDecimal.valueOf(-1);
-		Economy econ = Homos.getEconomy();
+		Economy econ = HomoSystem.getEconomy();
 
 		if (econ == null) {
 			return null;

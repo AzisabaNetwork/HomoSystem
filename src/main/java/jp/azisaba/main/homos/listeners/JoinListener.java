@@ -5,21 +5,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 import jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class JoinListener implements Listener {
 
-	private Homos plugin;
+	private HomoSystem plugin;
 
-	public JoinListener(Homos plugin) {
+	public JoinListener(HomoSystem plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			return;
 		}
 

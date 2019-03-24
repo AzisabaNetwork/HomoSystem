@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 import jp.azisaba.main.homos.classes.TicketValueData;
 
 /**
@@ -25,7 +25,7 @@ import jp.azisaba.main.homos.classes.TicketValueData;
 public class SQLHandler {
 
 	@SuppressWarnings("unused")
-	private Homos plugin;
+	private HomoSystem plugin;
 
 	private Connection con;
 
@@ -34,7 +34,7 @@ public class SQLHandler {
 	private final String moneydata_table = "moneydata";
 	private final String lastjoin_table = "lastjoin";
 
-	protected SQLHandler(Homos plugin, String ip, int port, String database, String user, String password) {
+	protected SQLHandler(HomoSystem plugin, String ip, int port, String database, String user, String password) {
 
 		this.plugin = plugin;
 
@@ -156,7 +156,7 @@ public class SQLHandler {
 
 	public boolean addMoneyDataColmun(String name) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}
@@ -167,7 +167,7 @@ public class SQLHandler {
 
 	public boolean removeMoneyDataColmun(String name) {
 
-		if (Homos.getPluginConfig().useTicketOnly) {
+		if (HomoSystem.getPluginConfig().useTicketOnly) {
 			throw new IllegalStateException(
 					"This plugin is now USE TICKET ONLY MODE. You can turn off read only mode in the config.");
 		}

@@ -14,9 +14,9 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class HOMOsConfig {
+public class HomoSystemConfig {
 
-	private Homos plugin;
+	private HomoSystem plugin;
 	private FileConfiguration conf;
 
 	@ConfigOptions(path = "ServerName")
@@ -40,7 +40,7 @@ public class HOMOsConfig {
 	@ConfigOptions(path = "TicketValue.UpdateTicketValueSeconds")
 	public int updateTicketValueSeconds = 60 * 5;
 
-	public HOMOsConfig(Homos plugin) {
+	public HomoSystemConfig(HomoSystem plugin) {
 		this.plugin = plugin;
 		this.conf = plugin.getConfig();
 	}

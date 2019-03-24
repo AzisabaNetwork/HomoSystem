@@ -3,15 +3,15 @@ package jp.azisaba.main.homos.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import jp.azisaba.main.homos.Homos;
+import jp.azisaba.main.homos.HomoSystem;
 import jp.azisaba.main.homos.events.TicketToggleBoostEvent;
 import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
 public class TicketValueUpdateListener implements Listener {
 
-	private Homos plugin;
+	private HomoSystem plugin;
 
-	public TicketValueUpdateListener(Homos plugin) {
+	public TicketValueUpdateListener(HomoSystem plugin) {
 		this.plugin = plugin;
 	}
 

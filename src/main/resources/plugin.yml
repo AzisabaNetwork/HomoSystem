@@ -1,5 +1,5 @@
-name: Homos
-main: jp.azisaba.main.homos.Homos
+name: HomoSystem
+main: jp.azisaba.main.homos.HomoSystem
 version: 1.1.6-beta
 author: siloneco
 description: "Hyper Original Money Operator System."

@@ -16,19 +16,19 @@ import jp.azisaba.main.homos.ticketvalue.TicketValueUpdateTask;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 
-public class Homos extends JavaPlugin {
+public class HomoSystem extends JavaPlugin {
 
-	private static HOMOsConfig config;
+	private static HomoSystemConfig config;
 	private static TicketValueManager ticketValueManager;
 	private static Economy econ = null;
 	private static BukkitTask task;
-	private static Homos instance;
+	private static HomoSystem instance;
 
 	@Override
 	public void onEnable() {
 
-		Homos.config = new HOMOsConfig(this);
-		Homos.config.loadConfig();
+		HomoSystem.config = new HomoSystemConfig(this);
+		HomoSystem.config.loadConfig();
 
 		if (config.serverName.equalsIgnoreCase("Unknown") && !config.useTicketOnly) {
 			getLogger().warning("サーバー名は 'Unknown' 以外である必要があります。Pluginは無効化されます...");
@@ -55,7 +55,7 @@ public class Homos extends JavaPlugin {
 				.setPermissionMessage(ChatColor.GREEN + "おっと！ " + ChatColor.RED + "あなたには権限がありません！");
 
 		if (config.hasEconomy && !config.useTicketOnly) {
-			Homos.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
+			HomoSystem.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(this, 20,
 					(long) (20 * config.updateTicketValueSeconds));
 		}
 
@@ -92,19 +92,19 @@ public class Homos extends JavaPlugin {
 
 		instance.reloadConfig();
 
-		Homos.config = new HOMOsConfig(instance);
-		Homos.config.loadConfig();
+		HomoSystem.config = new HomoSystemConfig(instance);
+		HomoSystem.config.loadConfig();
 
 		SQLManager.closeAll();
 		SQLManager.init(instance);
 
-		if (Homos.task != null) {
-			Homos.task.cancel();
-			Homos.task = null;
+		if (HomoSystem.task != null) {
+			HomoSystem.task.cancel();
+			HomoSystem.task = null;
 		}
 
 		if (config.hasEconomy && !config.useTicketOnly) {
-			Homos.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(instance, 0, 60 * 20);
+			HomoSystem.task = new TicketValueUpdateTask().runTaskTimerAsynchronously(instance, 0, 60 * 20);
 		}
 
 		if (config.useTicketOnly) {
@@ -112,8 +112,8 @@ public class Homos extends JavaPlugin {
 		}
 	}
 
-	public static HOMOsConfig getPluginConfig() {
-		return Homos.config;
+	public static HomoSystemConfig getPluginConfig() {
+		return HomoSystem.config;
 	}
 
 	public static Economy getEconomy() {
