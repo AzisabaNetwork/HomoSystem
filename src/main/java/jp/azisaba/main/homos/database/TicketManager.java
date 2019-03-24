@@ -86,7 +86,13 @@ public class TicketManager {
 		if (money.compareTo(BigInteger.ZERO) < 0) {
 
 			if (!SQLManager.getColumnsFromTicketValueData().contains(server)) {
-				throw new IllegalArgumentException("There is no server called \"" + server + "\"");
+				if (server == null) {
+					throw new IllegalArgumentException(
+							"There is no server data called null(\"" + HomoSystem.getPluginConfig().serverName + "\")");
+				} else {
+					throw new IllegalArgumentException(
+							"There is no server data called \"" + server + "\"");
+				}
 			}
 
 			return BigInteger.valueOf(-1);
