@@ -7,10 +7,11 @@
 
   <name>${project.artifactId}</name>
   <description>Azisaba ticket system</description>
-  <url>https://github.com/${project.organization.name}/${project.artifactId}</url>
+
+  <url>https://azisaba.net</url>
   <organization>
-    <name>AzisabaDev</name>
-    <url>https://azisaba.net</url>
+    <name>siloneco</name>
+    <url>https://github.com/siloneco</url>
   </organization>
 
   <properties>
@@ -19,7 +20,7 @@
   </properties>
 
   <build>
-    <finalName>${project.artifactId}</finalName>
+    <finalName>${project.name}</finalName>
     <resources>
       <resource>
         <directory>src/main/resources</directory>
