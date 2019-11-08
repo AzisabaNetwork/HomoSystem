@@ -24,7 +24,6 @@ import jp.azisaba.main.homos.classes.TicketValueData;
  */
 public class SQLHandler {
 
-	@SuppressWarnings("unused")
 	private HomoSystem plugin;
 
 	private Connection con;
@@ -73,6 +72,7 @@ public class SQLHandler {
 			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			plugin.getLogger().warning("Executed cmd: " + str);
 		} finally {
 			closeStatement(stm);
 		}
@@ -90,6 +90,7 @@ public class SQLHandler {
 			set = stm.executeQuery(str);
 		} catch (Exception e) {
 			e.printStackTrace();
+			plugin.getLogger().warning("Executed cmd: " + str);
 		} finally {
 			closeStatement(stm);
 		}
@@ -212,13 +213,14 @@ public class SQLHandler {
 		Statement stm = null;
 		List<TicketValueData> valueList = new ArrayList<>();
 
+		String cmd = null;
 		try {
 			stm = con.createStatement();
 
-			String where = "server='" + String.join("', OR server='", servers) + "'";
+			String where = "server='" + String.join("' OR server='", servers) + "'";
 
-			ResultSet set = stm
-					.executeQuery("select * from " + getTicketValueTableName() + " where " + where + ";");
+			cmd = "select * from " + getTicketValueTableName() + " where " + where + ";";
+			ResultSet set = stm.executeQuery(cmd);
 
 			while (set.next()) {
 				String exactServerName = set.getString("server");
@@ -230,6 +232,7 @@ public class SQLHandler {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			plugin.getLogger().warning("Executed cmd: " + cmd);
 		} finally {
 			closeStatement(stm);
 		}

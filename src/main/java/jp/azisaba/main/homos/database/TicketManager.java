@@ -134,10 +134,11 @@ public class TicketManager {
 		builder.append("ON DUPLICATE KEY UPDATE "); // duplicate
 
 		for (TicketValueData med : values) {
-			builder.append(med.getServerName() + "=" + med.getServerName() + "+VALUES(" + med.getServerName() + ") "); // updates
+			builder.append(med.getServerName() + "=" + med.getServerName() + "+VALUES(" + med.getServerName() + "), "); // updates
 		}
 
-		boolean success = sql.executeCommand(builder.toString() + ";");
+		String cmd = builder.toString().trim();
+		boolean success = sql.executeCommand(cmd.substring(0, cmd.length() - 1) + ";");
 		return success;
 	}
 
