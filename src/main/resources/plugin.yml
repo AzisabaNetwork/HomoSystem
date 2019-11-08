@@ -1,6 +1,6 @@
-name: HomoSystem
+name: ${project.name}
 main: jp.azisaba.main.homos.HomoSystem
-version: 1.1.6-beta
+version: ${project.version}
 author: siloneco
 description: "Hyper Original Money Operator System."
 softdepend: ["Vault"]
