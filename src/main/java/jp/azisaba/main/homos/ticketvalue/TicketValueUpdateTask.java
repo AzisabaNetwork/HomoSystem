@@ -4,8 +4,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class TicketValueUpdateTask extends BukkitRunnable {
 
-	@Override
-	public void run() {
-		TicketValueUtils.update();
-	}
+    @Override
+    public void run() {
+        TicketValueUtils.update();
+    }
 }

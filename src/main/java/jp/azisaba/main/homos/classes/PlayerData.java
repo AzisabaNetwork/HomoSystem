@@ -8,93 +8,93 @@ import jp.azisaba.main.homos.HomoSystem;
 
 public class PlayerData {
 
-	private UUID uuid;
-	private String name;
-	private BigInteger tickets;
-	private HashMap<String, BigInteger> moneyMap = new HashMap<>();
-	private HashMap<String, Long> lastJoin = new HashMap<>();
+    private UUID uuid;
+    private String name;
+    private BigInteger tickets;
+    private HashMap<String, BigInteger> moneyMap = new HashMap<>();
+    private HashMap<String, Long> lastJoin = new HashMap<>();
 
-	public PlayerData(UUID uuid, BigInteger tickets) {
-		this.uuid = uuid;
-		this.tickets = tickets;
-	}
+    public PlayerData(UUID uuid, BigInteger tickets) {
+        this.uuid = uuid;
+        this.tickets = tickets;
+    }
 
-	public PlayerData(String name, BigInteger tickets) {
-		this.name = name;
-		this.tickets = tickets;
-	}
+    public PlayerData(String name, BigInteger tickets) {
+        this.name = name;
+        this.tickets = tickets;
+    }
 
-	public PlayerData(UUID uuid, String name, BigInteger tickets) {
-		this.uuid = uuid;
-		this.name = name;
-		this.tickets = tickets;
-	}
+    public PlayerData(UUID uuid, String name, BigInteger tickets) {
+        this.uuid = uuid;
+        this.name = name;
+        this.tickets = tickets;
+    }
 
-	public UUID getUuid() {
-		return uuid;
-	}
+    public UUID getUuid() {
+        return uuid;
+    }
 
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public BigInteger getTickets() {
-		return tickets;
-	}
+    public BigInteger getTickets() {
+        return tickets;
+    }
 
-	public void setTickets(BigInteger tickets) {
-		this.tickets = tickets;
-	}
+    public void setTickets(BigInteger tickets) {
+        this.tickets = tickets;
+    }
 
-	public long getLastJoin(String server) {
-		if (lastJoin.containsKey(server)) {
-			return lastJoin.get(server);
-		}
+    public long getLastJoin(String server) {
+        if ( lastJoin.containsKey(server) ) {
+            return lastJoin.get(server);
+        }
 
-		return 0L;
-	}
+        return 0L;
+    }
 
-	public long getLastJoin() {
-		String serverName = HomoSystem.getPluginConfig().serverName;
-		return getLastJoin(serverName);
-	}
+    public long getLastJoin() {
+        String serverName = HomoSystem.getPluginConfig().serverName;
+        return getLastJoin(serverName);
+    }
 
-	public void setLastJoin(String server, long value) {
-		this.lastJoin.put(server, value);
-	}
+    public void setLastJoin(String server, long value) {
+        this.lastJoin.put(server, value);
+    }
 
-	public BigInteger getMoney(String server) {
+    public BigInteger getMoney(String server) {
 
-		if (server == null) {
+        if ( server == null ) {
 
-			if (HomoSystem.getPluginConfig().serverName != null) {
-				return getMoney(HomoSystem.getPluginConfig().serverName);
-			}
+            if ( HomoSystem.getPluginConfig().serverName != null ) {
+                return getMoney(HomoSystem.getPluginConfig().serverName);
+            }
 
-			return BigInteger.valueOf(-1);
-		}
+            return BigInteger.valueOf(-1);
+        }
 
-		if (moneyMap.containsKey(server)) {
-			return moneyMap.get(server);
-		}
+        if ( moneyMap.containsKey(server) ) {
+            return moneyMap.get(server);
+        }
 
-		return BigInteger.valueOf(-1);
-	}
+        return BigInteger.valueOf(-1);
+    }
 
-	public BigInteger getMoney() {
-		String serverName = HomoSystem.getPluginConfig().serverName;
-		return getMoney(serverName);
-	}
+    public BigInteger getMoney() {
+        String serverName = HomoSystem.getPluginConfig().serverName;
+        return getMoney(serverName);
+    }
 
-	public void setMoney(String server, BigInteger money) {
-		this.moneyMap.put(server, money);
-	}
+    public void setMoney(String server, BigInteger money) {
+        this.moneyMap.put(server, money);
+    }
 }

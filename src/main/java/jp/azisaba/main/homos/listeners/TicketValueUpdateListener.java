@@ -9,24 +9,24 @@ import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
 public class TicketValueUpdateListener implements Listener {
 
-	private HomoSystem plugin;
+    private HomoSystem plugin;
 
-	public TicketValueUpdateListener(HomoSystem plugin) {
-		this.plugin = plugin;
-	}
+    public TicketValueUpdateListener(HomoSystem plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler
-	public void onUpdate(TicketValueUpdateEvent e) {
-		plugin.getLogger().info("Ticket value updated. new value is " + e.getValue());
-	}
+    @EventHandler
+    public void onUpdate(TicketValueUpdateEvent e) {
+        plugin.getLogger().info("Ticket value updated. new value is " + e.getValue());
+    }
 
-	@EventHandler
-	public void onBoostToggle(TicketToggleBoostEvent e) {
+    @EventHandler
+    public void onBoostToggle(TicketToggleBoostEvent e) {
 
-		if (e.isBoostModeEnable()) {
-			plugin.getLogger().info("Boost mode enabled!!");
-		} else {
-			plugin.getLogger().info("Boost mode disabled.");
-		}
-	}
+        if ( e.isBoostModeEnable() ) {
+            plugin.getLogger().info("Boost mode enabled!!");
+        } else {
+            plugin.getLogger().info("Boost mode disabled.");
+        }
+    }
 }

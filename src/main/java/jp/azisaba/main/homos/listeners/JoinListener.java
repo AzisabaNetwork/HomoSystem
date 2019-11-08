@@ -10,34 +10,34 @@ import jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class JoinListener implements Listener {
 
-	private HomoSystem plugin;
+    private HomoSystem plugin;
 
-	public JoinListener(HomoSystem plugin) {
-		this.plugin = plugin;
-	}
+    public JoinListener(HomoSystem plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent e) {
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
 
-		if (HomoSystem.getPluginConfig().useTicketOnly) {
-			return;
-		}
+        if ( HomoSystem.getPluginConfig().useTicketOnly ) {
+            return;
+        }
 
-		Player p = e.getPlayer();
+        Player p = e.getPlayer();
 
-		new Thread() {
-			public void run() {
-				long start = System.currentTimeMillis();
+        new Thread() {
+            public void run() {
+                long start = System.currentTimeMillis();
 
-				boolean success = PlayerDataManager.updatePlayerData(p.getUniqueId(), p.getName(),
-						System.currentTimeMillis());
-				if (!success) {
-					plugin.getLogger().warning("プレイヤーデータの更新に失敗しました");
-				} else {
-					long end = System.currentTimeMillis();
-					plugin.getLogger().info(p.getName() + "のプレイヤーデータを更新しました。 (" + (end - start) + "ms)");
-				}
-			}
-		}.start();
-	}
+                boolean success = PlayerDataManager.updatePlayerData(p.getUniqueId(), p.getName(),
+                        System.currentTimeMillis());
+                if ( !success ) {
+                    plugin.getLogger().warning("プレイヤーデータの更新に失敗しました");
+                } else {
+                    long end = System.currentTimeMillis();
+                    plugin.getLogger().info(p.getName() + "のプレイヤーデータを更新しました。 (" + (end - start) + "ms)");
+                }
+            }
+        }.start();
+    }
 }
