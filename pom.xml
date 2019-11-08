@@ -3,7 +3,7 @@
 
   <groupId>net.azisaba</groupId>
   <artifactId>HomoSystem</artifactId>
-  <version>1.1.5-beta</version>
+  <version>1.1.6-beta</version>
 
   <name>${project.artifactId}</name>
   <description>Azisaba ticket system</description>
@@ -36,6 +36,31 @@
           <source>${java.version}</source>
           <target>${java.version}</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <relocations>
+                <relocation>
+                  <pattern>org.apache.commons.lang3</pattern>
+                  <shadedPattern>jp.azisaba.main.homos.dependencies@lang3</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>me.rayzr522.jsonmessage</pattern>
+                  <shadedPattern>jp.azisaba.main.homos.dependencies@jsonmessage</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
