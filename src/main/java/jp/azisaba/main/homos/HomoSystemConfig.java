@@ -16,8 +16,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class HomoSystemConfig {
 
-    private HomoSystem plugin;
-    private FileConfiguration conf;
+    private final HomoSystem plugin;
+    private final FileConfiguration conf;
 
     @ConfigOptions(path = "ServerName")
     public String serverName = "Unknown";
@@ -42,7 +42,7 @@ public class HomoSystemConfig {
 
     public HomoSystemConfig(HomoSystem plugin) {
         this.plugin = plugin;
-        this.conf = plugin.getConfig();
+        conf = plugin.getConfig();
     }
 
     public void loadConfig() {

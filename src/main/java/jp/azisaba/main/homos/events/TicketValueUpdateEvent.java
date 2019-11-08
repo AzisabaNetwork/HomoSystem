@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 public class TicketValueUpdateEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private BigInteger value;
+    private final BigInteger value;
 
     public TicketValueUpdateEvent(BigInteger value) {
         this.value = value;

@@ -4,15 +4,15 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.UUID;
 
-import jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
 
 public class PlayerData {
 
     private UUID uuid;
     private String name;
     private BigInteger tickets;
-    private HashMap<String, BigInteger> moneyMap = new HashMap<>();
-    private HashMap<String, Long> lastJoin = new HashMap<>();
+    private final HashMap<String, BigInteger> moneyMap = new HashMap<>();
+    private final HashMap<String, Long> lastJoin = new HashMap<>();
 
     public PlayerData(UUID uuid, BigInteger tickets) {
         this.uuid = uuid;
@@ -68,7 +68,7 @@ public class PlayerData {
     }
 
     public void setLastJoin(String server, long value) {
-        this.lastJoin.put(server, value);
+        lastJoin.put(server, value);
     }
 
     public BigInteger getMoney(String server) {
@@ -95,6 +95,6 @@ public class PlayerData {
     }
 
     public void setMoney(String server, BigInteger money) {
-        this.moneyMap.put(server, money);
+        moneyMap.put(server, money);
     }
 }

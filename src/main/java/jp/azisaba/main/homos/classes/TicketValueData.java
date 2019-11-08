@@ -4,10 +4,10 @@ import java.math.BigInteger;
 
 public class TicketValueData {
 
-    private String serverName;
-    private BigInteger median;
-    private boolean locked;
-    private boolean boost;
+    private final String serverName;
+    private final BigInteger median;
+    private final boolean locked;
+    private final boolean boost;
 
     public TicketValueData(String serverName, BigInteger median, boolean locked, boolean boost) {
         this.serverName = serverName;

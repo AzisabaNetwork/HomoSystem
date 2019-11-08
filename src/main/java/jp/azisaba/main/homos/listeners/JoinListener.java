@@ -5,12 +5,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import jp.azisaba.main.homos.HomoSystem;
-import jp.azisaba.main.homos.database.PlayerDataManager;
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class JoinListener implements Listener {
 
-    private HomoSystem plugin;
+    private final HomoSystem plugin;
 
     public JoinListener(HomoSystem plugin) {
         this.plugin = plugin;

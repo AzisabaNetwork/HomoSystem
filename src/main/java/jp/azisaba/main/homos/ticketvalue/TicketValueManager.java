@@ -4,16 +4,16 @@ import java.math.BigInteger;
 
 import org.bukkit.Bukkit;
 
-import jp.azisaba.main.homos.HomoSystem;
-import jp.azisaba.main.homos.classes.TicketValueData;
-import jp.azisaba.main.homos.database.SQLHandler;
-import jp.azisaba.main.homos.database.SQLManager;
-import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.classes.TicketValueData;
+import src.main.java.jp.azisaba.main.homos.database.SQLHandler;
+import src.main.java.jp.azisaba.main.homos.database.SQLManager;
+import src.main.java.jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
 public class TicketValueManager {
 
     @SuppressWarnings("unused")
-    private HomoSystem plugin;
+    private final HomoSystem plugin;
 
     public TicketValueManager(HomoSystem plugin) {
         this.plugin = plugin;

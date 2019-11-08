@@ -9,9 +9,9 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import jp.azisaba.main.homos.HomoSystem;
-import jp.azisaba.main.homos.classes.PlayerData;
-import jp.azisaba.main.homos.classes.TicketValueData;
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
+import src.main.java.jp.azisaba.main.homos.classes.TicketValueData;
 
 public class TicketManager {
 
@@ -105,7 +105,7 @@ public class TicketManager {
         }
 
         BigInteger value = money.divide(tickets);
-        value = (new BigDecimal(value.multiply(amount)).multiply(BigDecimal.valueOf(0.9))).toBigInteger();
+        value = new BigDecimal(value.multiply(amount)).multiply(BigDecimal.valueOf(0.9)).toBigInteger();
 
         return value;
     }

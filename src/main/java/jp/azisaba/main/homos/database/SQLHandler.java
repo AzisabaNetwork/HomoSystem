@@ -15,8 +15,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import jp.azisaba.main.homos.HomoSystem;
-import jp.azisaba.main.homos.classes.TicketValueData;
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.classes.TicketValueData;
 
 /**
  * @author siloneco

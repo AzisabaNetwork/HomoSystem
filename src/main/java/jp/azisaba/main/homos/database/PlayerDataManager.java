@@ -12,8 +12,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 
-import jp.azisaba.main.homos.HomoSystem;
-import jp.azisaba.main.homos.classes.PlayerData;
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
 
 public class PlayerDataManager {
 
@@ -74,12 +74,11 @@ public class PlayerDataManager {
         SQLHandler sql = SQLManager.getProtectedSQL();
 
         String cmd = "select uuid from " + sql.getLastjoinTableName() + " where " + HomoSystem.getPluginConfig().serverName + " > "
-                + (System.currentTimeMillis() - (1000L/** millis */
+                + (System.currentTimeMillis() - 1000L/** millis */
                         * 60L/** seconds */
                         * 60L/** minutes */
                         * 24L/** hours */
-                        * 30L/** days */
-                ));
+                        * 30L);
 
         List<UUID> uuidList = new ArrayList<>();
         Statement stm = sql.createStatement();
@@ -232,17 +231,20 @@ public class PlayerDataManager {
             return false;
         }
 
-        if ( data.getUuid() == null )
+        if ( data.getUuid() == null ) {
             data.setUuid(uuid);
+        }
 
-        if ( data.getName() == null )
+        if ( data.getName() == null ) {
             data.setName(name);
+        }
 
         data.setTickets(tickets);
 
         HashMap<UUID, HashMap<String, Long>> lastJoinMap = getLastjoinMap(Arrays.asList(data.getUuid()));
-        if ( lastJoinMap == null || lastJoinMap.size() <= 0 )
+        if ( lastJoinMap == null || lastJoinMap.size() <= 0 ) {
             return true;
+        }
 
         HashMap<String, Long> lastJoinMapServer = lastJoinMap.get(data.getUuid());
         for ( String server : lastJoinMapServer.keySet() ) {
@@ -277,8 +279,9 @@ public class PlayerDataManager {
 
                 for ( String column : columnList ) {
                     String value = moneySet.getString(column);
-                    if ( value == null )
+                    if ( value == null ) {
                         continue;
+                    }
 
                     moneyServerMap.put(column, new BigInteger(value));
                 }

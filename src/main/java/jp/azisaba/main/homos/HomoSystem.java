@@ -7,14 +7,15 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import jp.azisaba.main.homos.commands.HomoCommand;
-import jp.azisaba.main.homos.database.SQLManager;
-import jp.azisaba.main.homos.listeners.JoinListener;
-import jp.azisaba.main.homos.listeners.TicketValueUpdateListener;
-import jp.azisaba.main.homos.ticketvalue.TicketValueManager;
-import jp.azisaba.main.homos.ticketvalue.TicketValueUpdateTask;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
+
+import src.main.java.jp.azisaba.main.homos.commands.HomoCommand;
+import src.main.java.jp.azisaba.main.homos.database.SQLManager;
+import src.main.java.jp.azisaba.main.homos.listeners.JoinListener;
+import src.main.java.jp.azisaba.main.homos.listeners.TicketValueUpdateListener;
+import src.main.java.jp.azisaba.main.homos.ticketvalue.TicketValueManager;
+import src.main.java.jp.azisaba.main.homos.ticketvalue.TicketValueUpdateTask;
 
 public class HomoSystem extends JavaPlugin {
 

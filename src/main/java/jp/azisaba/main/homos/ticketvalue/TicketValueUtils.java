@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jp.azisaba.main.homos.HomoSystem;
-import jp.azisaba.main.homos.classes.PlayerData;
-import jp.azisaba.main.homos.database.PlayerDataManager;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
+
+import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
+import src.main.java.jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class TicketValueUtils {
 
@@ -69,9 +70,9 @@ public class TicketValueUtils {
 
             if ( moneyList.size() % 2 == 0 ) {
                 BigDecimal before = moneyList.get(moneyList.size() / 2);
-                BigDecimal after = moneyList.get((moneyList.size() / 2) + 1);
+                BigDecimal after = moneyList.get(moneyList.size() / 2 + 1);
 
-                median = (before.add(after)).divide(BigDecimal.valueOf(2));
+                median = before.add(after).divide(BigDecimal.valueOf(2));
             } else {
                 median = moneyList.get((int) (moneyList.size() / 2 + 0.5));
             }
