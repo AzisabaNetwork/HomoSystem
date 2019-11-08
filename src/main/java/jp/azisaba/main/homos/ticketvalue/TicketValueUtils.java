@@ -13,9 +13,9 @@ import java.util.Map.Entry;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
-import src.main.java.jp.azisaba.main.homos.database.PlayerDataManager;
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.classes.PlayerData;
+import jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class TicketValueUtils {
 

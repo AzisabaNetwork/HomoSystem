@@ -5,8 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.database.PlayerDataManager;
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.database.PlayerDataManager;
 
 public class JoinListener implements Listener {
 

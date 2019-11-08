@@ -5,7 +5,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.HomoSystem;
 
 public class SQLManager {
 

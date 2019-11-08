@@ -12,8 +12,8 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.classes.PlayerData;
 
 public class PlayerDataManager {
 

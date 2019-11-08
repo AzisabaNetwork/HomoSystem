@@ -4,11 +4,11 @@ import java.math.BigInteger;
 
 import org.bukkit.Bukkit;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.classes.TicketValueData;
-import src.main.java.jp.azisaba.main.homos.database.SQLHandler;
-import src.main.java.jp.azisaba.main.homos.database.SQLManager;
-import src.main.java.jp.azisaba.main.homos.events.TicketValueUpdateEvent;
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.classes.TicketValueData;
+import jp.azisaba.main.homos.database.SQLHandler;
+import jp.azisaba.main.homos.database.SQLManager;
+import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
 public class TicketValueManager {
 

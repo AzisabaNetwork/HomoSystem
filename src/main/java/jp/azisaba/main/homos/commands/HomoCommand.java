@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.classes.PlayerData;
+import jp.azisaba.main.homos.database.PlayerDataManager;
+import jp.azisaba.main.homos.database.TicketManager;
+import jp.azisaba.main.homos.ticketvalue.TicketValueUtils;
 import me.rayzr522.jsonmessage.JSONMessage;
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
-import src.main.java.jp.azisaba.main.homos.database.PlayerDataManager;
-import src.main.java.jp.azisaba.main.homos.database.TicketManager;
-import src.main.java.jp.azisaba.main.homos.ticketvalue.TicketValueUtils;
 
 public class HomoCommand implements CommandExecutor {
 

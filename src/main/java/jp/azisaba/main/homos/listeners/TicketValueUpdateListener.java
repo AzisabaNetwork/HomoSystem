@@ -3,9 +3,9 @@ package jp.azisaba.main.homos.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.events.TicketToggleBoostEvent;
-import src.main.java.jp.azisaba.main.homos.events.TicketValueUpdateEvent;
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.events.TicketToggleBoostEvent;
+import jp.azisaba.main.homos.events.TicketValueUpdateEvent;
 
 public class TicketValueUpdateListener implements Listener {
 

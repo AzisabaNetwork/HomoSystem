@@ -9,9 +9,9 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
-import src.main.java.jp.azisaba.main.homos.classes.PlayerData;
-import src.main.java.jp.azisaba.main.homos.classes.TicketValueData;
+import jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.classes.PlayerData;
+import jp.azisaba.main.homos.classes.TicketValueData;
 
 public class TicketManager {
 

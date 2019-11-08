@@ -1,10 +1,10 @@
-package jp.azisaba.main.homos.classes;
+    package jp.azisaba.main.homos.classes;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.UUID;
 
-import src.main.java.jp.azisaba.main.homos.HomoSystem;
+import jp.azisaba.main.homos.HomoSystem;
 
 public class PlayerData {
 
