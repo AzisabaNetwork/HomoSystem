@@ -27,6 +27,7 @@ jobs:
       - run: |
           mkdir -pv ~/.ssh
           touch ~/.ssh/id_rsa
+          chmod -c 600 ~/.ssh/id_rsa
           echo "${{ secrets.MAVEN_REPO_KEY }}" > ~/.ssh/id_rsa
       - run: git clone git@github.com:AzisabaNetwork/mvn-repo.git
       - run: mvn -B -DaltDeploymentRepository=local::default::file://mvn-repo deploy
