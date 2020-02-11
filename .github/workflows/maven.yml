@@ -29,6 +29,8 @@ jobs:
           touch ~/.ssh/id_rsa
           chmod -c 600 ~/.ssh/id_rsa
           echo "${{ secrets.MAVEN_REPO_KEY }}" > ~/.ssh/id_rsa
+          git config --global user.email "null@azisaba.net"
+          git config --global user.name "$GITHUB_ACTOR"
       - run: git clone git@github.com:AzisabaNetwork/mvn-repo.git
       - run: mvn -B -DaltDeploymentRepository=local::default::file://mvn-repo deploy
       - run: |
