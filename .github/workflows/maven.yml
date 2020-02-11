@@ -24,12 +24,12 @@ jobs:
           java-version: 1.8
       - run: java -version
       - run: mvn --version
-      - run: git clone git@github.com:AzisabaNetwork/mvn-repo.git
-      - run: mvn -B -DaltDeploymentRepository=local::default::file://mvn-repo deploy
       - run: |
           mkdir -pv ~/.ssh
           touch ~/.ssh/id_rsa
           echo "${{ secrets.MAVEN_REPO_KEY }}" > ~/.ssh/id_rsa
+      - run: git clone git@github.com:AzisabaNetwork/mvn-repo.git
+      - run: mvn -B -DaltDeploymentRepository=local::default::file://mvn-repo deploy
       - run: |
           cd mvn-repo
           git add -A
