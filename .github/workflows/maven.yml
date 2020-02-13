@@ -24,7 +24,6 @@ jobs:
   deploy:
     name: Deploy with Java 8
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - uses: actions/checkout@v2
       - uses: webfactory/ssh-agent@v0.2.0
@@ -39,8 +38,8 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-deploy-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-build-
             ${{ runner.os }}-maven-deploy-
+      - run: mvn -B package
       - run: mvn -B -DaltDeploymentRepository=mvn-repo::default::file://mvn-repo deploy
       - run: |
           git config --local url.'ssh://git@github.com/'.insteadOf 'https://github.com/'
