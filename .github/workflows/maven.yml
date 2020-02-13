@@ -17,7 +17,7 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: repository-from-build
-          path: $HOME/.m2/repository
+          path: ${{ github.home }}/.m2/repository
       - uses: actions/upload-artifact@v1
         with:
           name: target-from-build
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: repository-from-build
-          path: $HOME/.m2/repository
+          path: ${{ github.home }}/.m2/repository
       - uses: actions/download-artifact@v1
         with:
           name: target-from-build
