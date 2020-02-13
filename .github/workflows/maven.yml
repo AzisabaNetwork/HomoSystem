@@ -14,14 +14,12 @@ jobs:
       - run: java -version
       - run: mvn --version
       - run: mvn -B package
-      - uses: actions/upload-artifact@v1
+      - uses: actions/cache@v1
         with:
-          name: repository-from-build
-          path: ${{ github.home }}/.m2/repository
-      - uses: actions/upload-artifact@v1
-        with:
-          name: target-from-build
-          path: target
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
   deploy:
     name: Deploy with Java 8
@@ -29,14 +27,12 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v1
+      - uses: actions/cache@v1
         with:
-          name: repository-from-build
-          path: ${{ github.home }}/.m2/repository
-      - uses: actions/download-artifact@v1
-        with:
-          name: target-from-build
-          path: target
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - uses: webfactory/ssh-agent@v0.2.0
         with:
           ssh-private-key: ${{ secrets.MAVEN_REPO_KEY }}
