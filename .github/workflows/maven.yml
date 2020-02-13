@@ -23,7 +23,6 @@ jobs:
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-${{ github.workflow }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-${{ github.workflow }}-
 
   deploy:
     name: Deploy with Java 8
@@ -48,7 +47,6 @@ jobs:
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-${{ github.workflow }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-${{ github.workflow }}-
       - run: |
           git config --local url.'ssh://git@github.com/'.insteadOf 'https://github.com/'
           git config --local user.email 'null@azisaba.net'
