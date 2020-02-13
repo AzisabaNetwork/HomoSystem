@@ -20,12 +20,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-build-
       - run: mvn -B package
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-build-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-build-
 
   deploy:
     name: Deploy with Java 8
@@ -43,17 +37,11 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-build-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-deploy-
-            ${{ runner.os }}-maven-build-
-      - run: mvn -B -DaltDeploymentRepository=mvn-repo::default::file://mvn-repo deploy
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
           key: ${{ runner.os }}-maven-deploy-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
+            ${{ runner.os }}-maven-build-
             ${{ runner.os }}-maven-deploy-
+      - run: mvn -B -DaltDeploymentRepository=mvn-repo::default::file://mvn-repo deploy
       - run: |
           git config --local url.'ssh://git@github.com/'.insteadOf 'https://github.com/'
           git config --local user.email 'null@azisaba.net'
